@@ -5,10 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"bitbucket.org/kyicy/readimension/utility"
-
-	"bitbucket.org/kyicy/readimension/model"
 	"github.com/google/uuid"
+	"github.com/kyicy/readimension/model"
+	"github.com/kyicy/readimension/utility"
 	"github.com/labstack/echo"
 )
 
@@ -143,8 +142,6 @@ func getSignIn(c echo.Context) error {
 	for _, flash := range flashes {
 		tc.Flashes = append(tc.Flashes, flash.(string))
 	}
-
-	fmt.Println(tc.Flashes)
 
 	sess.Save(c.Request(), c.Response())
 	return c.Render(http.StatusOK, "user/sign_in", tc)

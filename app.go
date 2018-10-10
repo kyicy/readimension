@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"bitbucket.org/kyicy/readimension/route"
 	"github.com/gobuffalo/packr"
+	"github.com/kyicy/readimension/route"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
-	mw "bitbucket.org/kyicy/readimension/middleware"
+	mw "github.com/kyicy/readimension/middleware"
 )
 
 func createInstance(env string) *echo.Echo {

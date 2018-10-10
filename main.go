@@ -8,12 +8,11 @@ import (
 	"log"
 	"os"
 
-	"bitbucket.org/kyicy/readimension/model"
-	"bitbucket.org/kyicy/readimension/utility"
 	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-
+	"github.com/kyicy/readimension/model"
+	"github.com/kyicy/readimension/utility"
 	"github.com/labstack/echo-contrib/session"
 	redistore "gopkg.in/boj/redistore.v1"
 )

@@ -3,13 +3,13 @@ package route
 import (
 	"encoding/gob"
 
-	"bitbucket.org/kyicy/readimension/model"
-
-	"gopkg.in/go-playground/validator.v9"
-
 	"github.com/gorilla/sessions"
+	"github.com/kyicy/readimension/model"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
+	"gopkg.in/go-playground/validator.v9"
+
+	mw "github.com/kyicy/readimension/middleware"
 )
 
 type userData map[string]string
@@ -74,9 +74,9 @@ func Register(e *echo.Echo) {
 	e.GET("/activate/:uuid", getActivate)
 	e.GET("/sign-out", getSignOut)
 
-	e.GET("/", getTopBooks)
-	e.GET("/top-books", getTopBooks)
-	e.GET("/discover", getDiscover)
-	e.GET("/categories", getCategories)
+	e.GET("/", getTopBooks, mw.UserAuth)
+	e.GET("/top-books", getTopBooks, mw.UserAuth)
+	e.GET("/discover", getDiscover, mw.UserAuth)
+	e.GET("/categories", getCategories, mw.UserAuth)
 
 }
