@@ -5,11 +5,11 @@
         "session_secret": "",
         "mysql": {
             "addr": "localhost",
-            "Port": "3306",
-            "User": "",
-            "Password": "",
-            "Database": "",
-            "Size": 20
+            "port": "3306",
+            "user": "",
+            "password": "",
+            "database": "",
+            "size": 20
         },
         "redis": {
             "addr": "localhost",
