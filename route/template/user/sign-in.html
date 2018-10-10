@@ -1,0 +1,15 @@
+{{define "user/sign_in"}}
+{{template "header" .}}
+<link rel="stylesheet" href="/styles/login.css">
+<section>
+    <form class="pure-form" action="/sign-in" method="post">
+        {{range .Flashes}}
+            <div class="flash-message">{{.}}</div>
+        {{end}}
+        <input type="email" name="email"  placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required minlength="5">
+        <input class="pure-button" type="submit" value="Sign In">
+    </form>
+</section>
+{{template "footer" .}}
+{{end}}

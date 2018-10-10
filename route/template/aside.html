@@ -1,0 +1,43 @@
+{{define "aside"}}
+<aside role="left-nav">
+    <div role="aside-menu">
+        <span>Browse</span>
+
+        <span class={{if (eq .Active "TopBooks") }}"active" {{else}} "" {{end}}>
+            <a href="/top-books"><i class="material-icons">sort</i>Top Books</a>
+        </span>
+
+        <span class={{if (eq .Active "Discover") }}"active" {{else}} "" {{end}}>
+            <a href="/discover"><i class="material-icons">whatshot</i>Discover</a>
+        </span>
+
+        <span class={{if (eq .Active "Categories") }}"active" {{else}} "" {{end}}>
+            <a href="/categories"><i class="material-icons">category</i>Categories</a>
+        </span>
+    </div>
+
+    <hr>
+
+    <div role="aside-menu">
+        <span>Your Books</span>
+        <span class={{if (eq .Active "Reading") }}"active" {{else}} "" {{end}}>
+            <i class="material-icons">
+                library_books
+            </i>Reading
+        </span>
+        <span class={{if (eq .Active "FavoriteReads") }}"active" {{else}} "" {{end}}>
+            <i class="material-icons">
+                favorite
+            </i>
+            Favorite Reads
+        </span>
+        <span class={{if (eq .Active "History") }}"active" {{else}} "" {{end}}>
+            <i class="material-icons">
+                history
+            </i>
+            History
+        </span>
+    </div>
+
+</aside>
+{{end}}

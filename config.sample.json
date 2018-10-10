@@ -1,0 +1,22 @@
+{
+    "development": {
+        "addr": "localhost",
+        "port": "10086",
+        "session_secret": "",
+        "mysql": {
+            "addr": "localhost",
+            "Port": "3306",
+            "User": "",
+            "Password": "",
+            "Database": "",
+            "Size": 20
+        },
+        "redis": {
+            "addr": "localhost",
+            "port": "6379",
+            "password": "",
+            "size": 20,
+            "db": 7
+        }
+    }
+}

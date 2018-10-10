@@ -1,0 +1,40 @@
+@import url("/styles/common.css");
+
+body {
+    display: grid;
+    grid-template: 50px 1fr / 1fr
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    line-height: 2em;
+    align-items: center;
+}
+
+footer a {
+    color: rgb(87, 87, 87);
+    text-decoration: none;
+}
+
+form {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 30px 50px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+form input{
+    line-height: 1.7em;
+    margin: 8px 10px;
+    border-radius: 10px;
+}

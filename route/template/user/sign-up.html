@@ -1,0 +1,17 @@
+{{define "user/sign_up"}}
+{{template "header" .}}
+<link rel="stylesheet" href="/styles/login.css">
+<section>
+    <form class="pure-form" action="/sign-up" method="post">
+        {{range .Flashes}}
+            <div class="flash-message">{{.}}</div>
+        {{end}}
+        <input type="text" name="username" placeholder="Username" required minlength="1">
+        <input type="email" name="email"  placeholder="Email" required>
+        <input type="password" name="password"  placeholder="Password" required minlength="5">
+        <input type="password" name="c_password"  placeholder="Confirm Password" required minlength="5">
+        <input class="pure-button" type="submit" value="Sign Up">
+    </form>
+</section>
+{{template "footer" .}}
+{{end}}

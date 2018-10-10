@@ -1,0 +1,56 @@
+package main
+
+import (
+	"mime"
+	"net/http"
+	"path/filepath"
+	"strings"
+
+	"bitbucket.org/kyicy/readimension/route"
+	"github.com/gobuffalo/packr"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
+
+	mw "bitbucket.org/kyicy/readimension/middleware"
+)
+
+func createInstance(env string) *echo.Echo {
+	e := echo.New()
+	e.Use(middleware.CORS())
+	e.Use(middleware.Logger())
+	e.Use(middleware.SecureWithConfig(middleware.SecureConfig{
+		XSSProtection:      "1; mode=block",
+		ContentTypeNosniff: "nosniff",
+		XFrameOptions:      "SAMEORIGIN",
+		HSTSMaxAge:         3600,
+	}))
+
+	isProduction := env == "production"
+	if isProduction {
+		bundle(e)
+		e.Use(mw.Minify)
+	} else {
+		e.Static("/", "public")
+	}
+
+	route.Register(e)
+
+	return e
+}
+
+func bundle(e *echo.Echo) {
+	box := packr.NewBox("./public")
+
+	box.Walk(func(path string, f packr.File) error {
+
+		extName := filepath.Ext(path)
+		mt := mime.TypeByExtension(extName)
+
+		e.GET("/"+path, func(c echo.Context) error {
+			c.Response().Header().Set("Cache-Control", "max-age=3600")
+			r := strings.NewReader(box.String(path))
+			return c.Stream(http.StatusOK, mt, r)
+		})
+		return nil
+	})
+}

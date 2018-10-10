@@ -1,0 +1,42 @@
+{{define "header"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{.Title}}</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Princess+Sofia" rel="stylesheet">
+
+</head>
+
+<body>
+    <header>
+        <div role="header-left">
+            <a href="/"><span class="brand">Readimension</span></a>
+        </div>
+        <div role="header-right">
+            {{with .GetSession}}
+                {{if  (index .Values "userExist?")}}
+                    {{with index .Values "userData"}}
+                    <span>{{index . "name"}} | </span>
+                    {{end}}
+                    <a href="/sign-out">Sign Out</a>
+                {{else}}
+                    <a href="/sign-in">Sign In</a>
+                    <a href="/sign-up">Sign Up</a>
+                {{end}}
+
+            {{end}}
+
+        </div>
+
+    </header>
+    <main>
+        {{end}}

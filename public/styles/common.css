@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300");
+
+html,
+body {
+    min-height: 100vh;
+    background-color: rgb(246, 246, 246);
+    font-family: Roboto, sans-serif;
+}
+
+header {
+    display: grid;
+    grid-template: 1fr / 1fr 1fr;
+    background-color: white;
+    box-shadow: 0 2px 1px -2px gray;
+}
+
+header div[role=header-left]{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 30px;
+}
+
+header div[role=header-right]{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 30px;
+
+}
+
+header div[role=header-right] a{
+    color: rgb(87, 87, 87);
+    margin-right: 10px;
+    line-height: 1.5em;
+    padding: 5px;
+}
+
+header div[role=header-right] a:hover{
+    background-color: rgb(220, 220, 220);
+}
+
+header  a {
+    text-decoration: none;
+}
+
+span.brand {
+    font-family: 'Princess Sofia', cursive;
+    color: rgb(50, 182, 122);
+    font-size: 1.5em;
+}
+
+
+div.flash-message {
+    padding-left: 7%;
+    font-size: 0.8em;
+    color: red;
+}

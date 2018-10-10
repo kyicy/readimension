@@ -1,0 +1,17 @@
+{{define "user/to_be_activated"}}
+{{template "header" .}}
+<link rel="stylesheet" href="/styles/login.css">
+<style>
+section {
+    background-color: white;
+    padding: 50px;
+}
+</style>
+<section>
+    <p>An email has been sent to you.</p>
+    <p>It may be found in <strong>Spam</strong> folder</p>
+    <p>The link will expire in 30 minutes.</p>
+    <p>Please verify it's you.</p>
+</section>
+{{template "footer" .}}
+{{end}}

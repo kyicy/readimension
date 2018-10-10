@@ -1,0 +1,14 @@
+{{define "user/activate"}}
+{{template "header" .}}
+<link rel="stylesheet" href="/styles/login.css">
+<style>
+    section {
+        background-color: white;
+        padding: 50px;
+    }
+</style>
+<section>
+    <p class="{{.IsSuccess}}">{{.Message}}</p>
+</section>
+{{template "footer" .}}
+{{end}}
