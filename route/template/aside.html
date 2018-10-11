@@ -1,41 +1,34 @@
 {{define "aside"}}
 <aside role="left-nav">
+
     <div role="aside-menu">
         <span>Browse</span>
-
-        <span class={{if (eq .Active "TopBooks") }}"active" {{else}} "" {{end}}>
-            <a href="/top-books"><i class="material-icons">sort</i>Top Books</a>
-        </span>
-
-        <span class={{if (eq .Active "Discover") }}"active" {{else}} "" {{end}}>
-            <a href="/discover"><i class="material-icons">whatshot</i>Discover</a>
-        </span>
-
-        <span class={{if (eq .Active "Categories") }}"active" {{else}} "" {{end}}>
-            <a href="/categories"><i class="material-icons">category</i>Categories</a>
+        <span class={{if (eq .Active "/u/stream") }}"active" {{else}} "" {{end}}>
+            <a href="/u/stream"><i class="material-icons">whatshot</i>Stream</a>
         </span>
     </div>
 
     <hr>
 
     <div role="aside-menu">
-        <span>Your Books</span>
-        <span class={{if (eq .Active "Reading") }}"active" {{else}} "" {{end}}>
-            <i class="material-icons">
-                library_books
-            </i>Reading
+        <span>Library</span>
+        <span class={{if (eq .Active "/u/books") }}"active" {{else}} "" {{end}}>
+            <a href="/u/books"><i class="material-icons">library_books</i>Books</a>
         </span>
-        <span class={{if (eq .Active "FavoriteReads") }}"active" {{else}} "" {{end}}>
-            <i class="material-icons">
-                favorite
-            </i>
-            Favorite Reads
+        <span class={{if (eq .Active "/u/lists") }}"active" {{else}} "" {{end}}>
+            <a href="/u/lists"><i class="material-icons">collections</i>Lists</a>
         </span>
-        <span class={{if (eq .Active "History") }}"active" {{else}} "" {{end}}>
-            <i class="material-icons">
-                history
-            </i>
-            History
+    </div>
+
+    <hr>
+
+    <div role="aside-menu">
+        <span>New</span>
+        <span class={{if (eq .Active "/u/books/new") }}"active" {{else}} "" {{end}}>
+            <a href="/u/books/new"><i class="material-icons">library_add</i>Book</a>
+        </span>
+        <span class={{if (eq .Active "/u/lists/new") }}"active" {{else}} "" {{end}}>
+            <a href="/u/lists/new"><i class="material-icons">playlist_add</i>List</a>
         </span>
     </div>
 

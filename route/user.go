@@ -12,7 +12,7 @@ import (
 )
 
 func getSignUp(c echo.Context) error {
-	tc := newTemplateCommon(c, "Sign Up", "")
+	tc := newTemplateCommon(c, "Sign Up")
 	tc.logout()
 
 	sess, _ := tc.GetSession()
@@ -36,7 +36,7 @@ type signUpUser struct {
 }
 
 func postSignUp(c echo.Context) error {
-	tc := newTemplateCommon(c, "", "")
+	tc := newTemplateCommon(c, "")
 	sess, _ := tc.GetSession()
 	u := new(signUpUser)
 	if err := c.Bind(u); err != nil {
@@ -91,7 +91,7 @@ type _getActivateData struct {
 
 func getActivate(c echo.Context) error {
 	data := new(_getActivateData)
-	tc := newTemplateCommon(c, "Activate", "")
+	tc := newTemplateCommon(c, "Activate")
 	data.TempalteCommon = tc
 
 	uuid := c.Param("uuid")
@@ -133,7 +133,7 @@ func getActivate(c echo.Context) error {
 }
 
 func getSignIn(c echo.Context) error {
-	tc := newTemplateCommon(c, "Sign In", "")
+	tc := newTemplateCommon(c, "Sign In")
 	tc.logout()
 
 	sess, _ := tc.GetSession()
@@ -154,7 +154,7 @@ type signInUser struct {
 }
 
 func postSignIn(c echo.Context) error {
-	tc := newTemplateCommon(c, "", "")
+	tc := newTemplateCommon(c, "")
 	sess, _ := tc.GetSession()
 	u := new(signInUser)
 	if err := c.Bind(u); err != nil {
@@ -187,12 +187,12 @@ func postSignIn(c echo.Context) error {
 }
 
 func getSignOut(c echo.Context) error {
-	tc := newTemplateCommon(c, "", "")
+	tc := newTemplateCommon(c, "")
 	tc.logout()
 	return c.Redirect(http.StatusSeeOther, "/")
 }
 
 func getToBeActivated(c echo.Context) error {
-	tc := newTemplateCommon(c, "To Be Activated", "")
+	tc := newTemplateCommon(c, "To Be Activated")
 	return c.Render(http.StatusOK, "user/to_be_activated", tc)
 }

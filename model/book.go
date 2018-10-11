@@ -4,7 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type UserBook struct {
+type Book struct {
 	gorm.Model
 
 	Epub   Epub

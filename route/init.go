@@ -43,20 +43,19 @@ func (tc *TempalteCommon) login(u *model.User) {
 	sess, _ := tc.GetSession()
 	sess.Values["userExist?"] = true
 	sess.Values["userData"] = userData{
-		"id":      string(u.ID),
-		"name":    u.Name,
-		"email":   u.Email,
-		"hero_id": string(u.HeroID),
+		"id":    string(u.ID),
+		"name":  u.Name,
+		"email": u.Email,
 	}
 	sess.Save(tc.Request(), tc.Response())
 }
 
-func newTemplateCommon(c echo.Context, title, active string) *TempalteCommon {
+func newTemplateCommon(c echo.Context, title string) *TempalteCommon {
 	title = title + " - Readimension"
 	return &TempalteCommon{
 		Context: c,
 		Title:   title,
-		Active:  active,
+		Active:  c.Request().URL.Path,
 	}
 }
 
@@ -74,9 +73,13 @@ func Register(e *echo.Echo) {
 	e.GET("/activate/:uuid", getActivate)
 	e.GET("/sign-out", getSignOut)
 
-	e.GET("/", getTopBooks, mw.UserAuth)
-	e.GET("/top-books", getTopBooks, mw.UserAuth)
-	e.GET("/discover", getDiscover, mw.UserAuth)
-	e.GET("/categories", getCategories, mw.UserAuth)
+	e.GET("/", getBooks, mw.UserAuth)
 
+	userGroup := e.Group("/u", mw.UserAuth)
+	userGroup.GET("/stream", getBooks)
+	userGroup.GET("/books", getBooks)
+	userGroup.GET("/books/new", getBooksNew)
+	userGroup.POST("/books/new", postBooksNew)
+	userGroup.GET("/lists", getLists)
+	userGroup.GET("/lists/new", getListsNew)
 }

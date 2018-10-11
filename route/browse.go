@@ -10,31 +10,40 @@ type gtbData struct {
 	*TempalteCommon
 }
 
-func getTopBooks(c echo.Context) error {
-	tc := newTemplateCommon(c, "Top Books", "TopBooks")
-	data := &gtbData{}
-	data.TempalteCommon = tc
-
-	return c.Render(http.StatusOK, "topBooks", data)
-}
-
-type gdData struct {
-	*TempalteCommon
-}
-
-func getDiscover(c echo.Context) error {
-	tc := newTemplateCommon(c, "Discover", "Discover")
+func getStream(c echo.Context) error {
+	tc := newTemplateCommon(c, "Stream")
 	data := &gtbData{}
 	data.TempalteCommon = tc
 	return c.Render(http.StatusOK, "topBooks", data)
 }
 
-type gcData struct {
-	*TempalteCommon
+func getBooks(c echo.Context) error {
+	tc := newTemplateCommon(c, "Books")
+	data := &gtbData{}
+	data.TempalteCommon = tc
+	return c.Render(http.StatusOK, "topBooks", data)
 }
 
-func getCategories(c echo.Context) error {
-	tc := newTemplateCommon(c, "Categories", "Categories")
+func getBooksNew(c echo.Context) error {
+	tc := newTemplateCommon(c, "Books")
+	data := &gtbData{}
+	data.TempalteCommon = tc
+	return c.Render(http.StatusOK, "books/new", data)
+}
+
+func postBooksNew(c echo.Context) error {
+	return c.NoContent(http.StatusOK)
+}
+
+func getLists(c echo.Context) error {
+	tc := newTemplateCommon(c, "Books")
+	data := &gtbData{}
+	data.TempalteCommon = tc
+	return c.Render(http.StatusOK, "topBooks", data)
+}
+
+func getListsNew(c echo.Context) error {
+	tc := newTemplateCommon(c, "Books")
 	data := &gtbData{}
 	data.TempalteCommon = tc
 	return c.Render(http.StatusOK, "topBooks", data)

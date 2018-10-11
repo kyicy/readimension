@@ -11,9 +11,9 @@ type User struct {
 	Name      string
 	Email     string `gorm:"type:varchar(100);unique_index"`
 	Password  string `gorm:"type:varchar(255)"`
-	HeroID    uint
-	UserBooks []UserBook
-	BookList  []BookList
+	Books     []Book
+	Lists     []List
+	Raindrops []Raindrop
 }
 
 // BeforeCreate is a hook function
