@@ -78,8 +78,11 @@ func Register(e *echo.Echo) {
 	userGroup := e.Group("/u", mw.UserAuth)
 	userGroup.GET("/stream", getBooks)
 	userGroup.GET("/books", getBooks)
+
 	userGroup.GET("/books/new", getBooksNew)
 	userGroup.POST("/books/new", postBooksNew)
+	userGroup.POST("/books/new/chunksdone", postChunksDone)
+
 	userGroup.GET("/lists", getLists)
 	userGroup.GET("/lists/new", getListsNew)
 }

@@ -112,8 +112,18 @@
         request: {
             endpoint: '/u/books/new'
         },
+        chunking: {
+            concurrent: {
+                enabled: true
+            },
+            enabled: true,
+            success: {
+                endpoint: "/u/books/new/chunksdone"
+            }
+        },
         validation: {
-            allowedExtensions: ['epub']
+            allowedExtensions: ['epub'],
+            sizeLimit: 100 * 1024 * 1024,
         }
     });
 </script>

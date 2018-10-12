@@ -17,24 +17,6 @@ func getStream(c echo.Context) error {
 	return c.Render(http.StatusOK, "topBooks", data)
 }
 
-func getBooks(c echo.Context) error {
-	tc := newTemplateCommon(c, "Books")
-	data := &gtbData{}
-	data.TempalteCommon = tc
-	return c.Render(http.StatusOK, "topBooks", data)
-}
-
-func getBooksNew(c echo.Context) error {
-	tc := newTemplateCommon(c, "Books")
-	data := &gtbData{}
-	data.TempalteCommon = tc
-	return c.Render(http.StatusOK, "books/new", data)
-}
-
-func postBooksNew(c echo.Context) error {
-	return c.NoContent(http.StatusOK)
-}
-
 func getLists(c echo.Context) error {
 	tc := newTemplateCommon(c, "Books")
 	data := &gtbData{}
