@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/kyicy/readimension/utility/epub"
 	"github.com/labstack/echo"
 )
 
@@ -61,7 +62,7 @@ func writeUploadResponse(w *echo.Response, err error) {
 	json.NewEncoder(w).Encode(uploadResponse)
 }
 
-func writeHttpResponse(w *echo.Response, httpCode int, err error) {
+func writeHTTPResponse(w *echo.Response, httpCode int, err error) {
 	w.WriteHeader(httpCode)
 	if err != nil {
 		w.Write([]byte(err.Error()))
@@ -110,6 +111,10 @@ func postBooksNew(c echo.Context) error {
 	}
 
 	writeUploadResponse(w, nil)
+
+	if len(partIndex) == 0 {
+		afterUpload(c, filename)
+	}
 	return nil
 }
 
@@ -121,19 +126,19 @@ func postChunksDone(c echo.Context) error {
 	filename := req.FormValue(paramFileName)
 	totalFileSize, err := strconv.Atoi(req.FormValue(paramTotalFileSize))
 	if err != nil {
-		writeHttpResponse(w, http.StatusInternalServerError, err)
+		writeHTTPResponse(w, http.StatusInternalServerError, err)
 		return nil
 	}
 	totalParts, err := strconv.Atoi(req.FormValue(paramTotalParts))
 	if err != nil {
-		writeHttpResponse(w, http.StatusInternalServerError, err)
+		writeHTTPResponse(w, http.StatusInternalServerError, err)
 		return nil
 	}
 
 	finalFilename := fmt.Sprintf("%s/%s/%s", uploadDir, uuid, filename)
 	f, err := os.Create(finalFilename)
 	if err != nil {
-		writeHttpResponse(w, http.StatusInternalServerError, err)
+		writeHTTPResponse(w, http.StatusInternalServerError, err)
 		return nil
 	}
 	defer f.Close()
@@ -143,12 +148,12 @@ func postChunksDone(c echo.Context) error {
 		part := fmt.Sprintf("%[1]s/%[2]s/%[2]s_%05[3]d", uploadDir, uuid, i)
 		partFile, err := os.Open(part)
 		if err != nil {
-			writeHttpResponse(w, http.StatusInternalServerError, err)
+			writeHTTPResponse(w, http.StatusInternalServerError, err)
 			return nil
 		}
 		written, err := io.Copy(f, partFile)
 		if err != nil {
-			writeHttpResponse(w, http.StatusInternalServerError, err)
+			writeHTTPResponse(w, http.StatusInternalServerError, err)
 			return nil
 		}
 		partFile.Close()
@@ -163,5 +168,19 @@ func postChunksDone(c echo.Context) error {
 		errorMsg := fmt.Sprintf("Total file size mistmatch, expected %d bytes but actual is %d", totalFileSize, totalWritten)
 		http.Error(w, errorMsg, http.StatusMethodNotAllowed)
 	}
+
+	afterUpload(c, finalFilename)
+	return nil
+}
+
+func afterUpload(c echo.Context, fileName string) error {
+	info, err := epub.Load(fileName)
+	if err != nil {
+		return err
+	}
+
+	book := info.Book()
+	fmt.Println(book.Title, book.Author)
+
 	return nil
 }
