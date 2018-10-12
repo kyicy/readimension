@@ -2,7 +2,13 @@ package route
 
 import (
 	"encoding/gob"
+	"fmt"
+	"mime"
+	"net/http"
+	"path/filepath"
+	"strings"
 
+	"github.com/gobuffalo/packr"
 	"github.com/gorilla/sessions"
 	"github.com/kyicy/readimension/model"
 	"github.com/labstack/echo"
@@ -43,7 +49,7 @@ func (tc *TempalteCommon) login(u *model.User) {
 	sess, _ := tc.GetSession()
 	sess.Values["userExist?"] = true
 	sess.Values["userData"] = userData{
-		"id":    string(u.ID),
+		"id":    fmt.Sprintf("%d", u.ID),
 		"name":  u.Name,
 		"email": u.Email,
 	}
@@ -76,6 +82,9 @@ func Register(e *echo.Echo) {
 	e.GET("/", getBooks, mw.UserAuth)
 
 	userGroup := e.Group("/u", mw.UserAuth)
+	userGroup.Static("/covers", "covers")
+	userGroup.Static("/books", "books")
+
 	userGroup.GET("/stream", getBooks)
 	userGroup.GET("/books", getBooks)
 
@@ -85,4 +94,43 @@ func Register(e *echo.Echo) {
 
 	userGroup.GET("/lists", getLists)
 	userGroup.GET("/lists/new", getListsNew)
+
+	box := packr.NewBox("../bib")
+	box.Walk(func(path string, f packr.File) error {
+		extName := filepath.Ext(path)
+		mt := mime.TypeByExtension(extName)
+
+		userGroup.GET("/"+path, func(c echo.Context) error {
+			c.Response().Header().Set("Cache-Control", "max-age=3600")
+			r := strings.NewReader(box.String(path))
+			return c.Stream(http.StatusOK, mt, r)
+		})
+		return nil
+	})
+	userGroup.GET("/i/", func(c echo.Context) error {
+		c.Response().Header().Set("Cache-Control", "max-age=3600")
+		r := box.String("i/index.html")
+		return c.HTML(http.StatusOK, r)
+	})
+}
+
+func getSessionUser(c echo.Context) (*model.User, error) {
+	userID, err := getSessionUserID(c)
+	if err != nil {
+		return nil, err
+	}
+	var userRecord model.User
+	model.DB.Where("id = ?", userID).First(&userRecord)
+	return &userRecord, nil
+}
+
+func getSessionUserID(c echo.Context) (string, error) {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		return "", err
+	}
+	ud := sess.Values["userData"]
+	userDataPointer := ud.(*userData)
+	userID := (*userDataPointer)["id"]
+	return userID, nil
 }

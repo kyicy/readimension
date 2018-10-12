@@ -20,6 +20,7 @@ import (
 type Book struct {
 	Hash     string
 	FilePath string
+	FileSize int64
 
 	HasCover bool
 	Title    string
@@ -90,6 +91,7 @@ func Load(filename string) (BookInfo, error) {
 		return nil, errors.Wrapf(err, "could not stat book")
 	}
 	e.book.FilePath = filename
+	e.book.FileSize = fi.Size()
 
 	s := sha256.New()
 	i, err := io.Copy(s, f)

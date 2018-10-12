@@ -2,21 +2,9 @@
 <aside role="left-nav">
 
     <div role="aside-menu">
-        <span>Browse</span>
-        <span class={{if (eq .Active "/u/stream") }}"active" {{else}} "" {{end}}>
-            <a href="/u/stream"><i class="material-icons">whatshot</i>Stream</a>
-        </span>
-    </div>
-
-    <hr>
-
-    <div role="aside-menu">
         <span>Library</span>
         <span class={{if (eq .Active "/u/books") }}"active" {{else}} "" {{end}}>
             <a href="/u/books"><i class="material-icons">library_books</i>Books</a>
-        </span>
-        <span class={{if (eq .Active "/u/lists") }}"active" {{else}} "" {{end}}>
-            <a href="/u/lists"><i class="material-icons">collections</i>Lists</a>
         </span>
     </div>
 
@@ -26,9 +14,6 @@
         <span>New</span>
         <span class={{if (eq .Active "/u/books/new") }}"active" {{else}} "" {{end}}>
             <a href="/u/books/new"><i class="material-icons">library_add</i>Book</a>
-        </span>
-        <span class={{if (eq .Active "/u/lists/new") }}"active" {{else}} "" {{end}}>
-            <a href="/u/lists/new"><i class="material-icons">playlist_add</i>List</a>
         </span>
     </div>
 

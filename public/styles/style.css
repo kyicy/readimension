@@ -81,7 +81,7 @@ div[role=aside-menu]>span:first-child {
     margin: 10px 15px;
 }
 
-.book>img {
+.book a img {
     width: 160px;
     height: 200px;
 }

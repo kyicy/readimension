@@ -16,7 +16,6 @@ import (
 
 func createInstance(env string) *echo.Echo {
 	e := echo.New()
-	e.Pre(middleware.RemoveTrailingSlash())
 	e.Use(middleware.CORS())
 	e.Use(middleware.Logger())
 	e.Use(middleware.SecureWithConfig(middleware.SecureConfig{

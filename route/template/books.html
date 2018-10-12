@@ -1,0 +1,26 @@
+{{define "books"}}
+{{template "header" .}}
+<link rel="stylesheet" href="/styles/style.css">
+{{template "aside" .}}
+<section>
+    <div role="book-shelf">
+
+        {{with .Books}}
+            {{range .}}
+                {{with .Epub}}
+                    <div class="book">
+                        {{if .HasCover}}
+                            <a href="/u/i/?book={{.SHA256}}" target="_blank"><img src="{{.CoverPath}}" alt=""></a>
+                        {{else}}
+                            <a href="/u/i/?book={{.SHA256}}" target="_blank"><img src="/images/NoBookCoverImage.jpg" alt=""></a>
+                        {{end}}
+                        <span title="{{.Title}}">{{.Title}}</span>
+                        <span title="{{.Author}}">{{.Author}}</span>
+                    </div>
+                {{end}}
+            {{end}}
+        {{end}}
+    </div>
+</section>
+{{template "footer" .}}
+{{end}}

@@ -4,20 +4,44 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"image/gif"
+	"image/jpeg"
+	"image/png"
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
+
+	"github.com/kyicy/readimension/model"
+	"github.com/mholt/archiver"
 
 	"github.com/kyicy/readimension/utility/epub"
 	"github.com/labstack/echo"
 )
 
+type getBooksData struct {
+	*TempalteCommon
+	Books []model.Book
+}
+
 func getBooks(c echo.Context) error {
 	tc := newTemplateCommon(c, "Books")
-	data := &gtbData{}
+	data := &getBooksData{}
 	data.TempalteCommon = tc
-	return c.Render(http.StatusOK, "topBooks", data)
+
+	var books []model.Book
+
+	userID, err := getSessionUserID(c)
+	if err != nil {
+		return err
+	}
+
+	model.DB.Where("user_id = ?", userID).Preload("Epub").Find(&books)
+
+	data.Books = books
+
+	return c.Render(http.StatusOK, "books", data)
 }
 
 func getBooksNew(c echo.Context) error {
@@ -169,18 +193,83 @@ func postChunksDone(c echo.Context) error {
 		http.Error(w, errorMsg, http.StatusMethodNotAllowed)
 	}
 
-	afterUpload(c, finalFilename)
-	return nil
+	return afterUpload(c, finalFilename)
 }
 
 func afterUpload(c echo.Context, fileName string) error {
+	defer func() {
+		// remove upload folder
+		path := filepath.Dir(fileName)
+		os.RemoveAll(path)
+	}()
+
 	info, err := epub.Load(fileName)
+
+	// not a epub file
+	if err != nil {
+		return err
+	}
+
+	userRecord, err := getSessionUser(c)
 	if err != nil {
 		return err
 	}
 
 	book := info.Book()
-	fmt.Println(book.Title, book.Author)
+	storeFolder := "books/" + book.Hash
+	storeName := storeFolder + ".epub"
+
+	var epubRecord model.Epub
+	model.DB.Where("sha256 = ?", book.Hash).First(&epubRecord)
+
+	if epubRecord.SHA256 != book.Hash {
+		os.MkdirAll("covers", 0777)
+
+		var coverFormat string
+		if info.HasCover() {
+			bytes, format, err := info.GetCover()
+			coverFormat = format
+
+			file, err := os.Create("covers/" + book.Hash + "." + format)
+			if err != nil {
+				return err
+			}
+
+			switch format {
+			case "gif":
+				gif.Encode(file, bytes, nil)
+			case "jpeg":
+				jpeg.Encode(file, bytes, nil)
+			case "png":
+				png.Encode(file, bytes)
+			}
+		}
+		os.MkdirAll("books", 0777)
+		os.Rename(fileName, storeName)
+
+		epubRecord = model.Epub{
+			Title:       book.Title,
+			SHA256:      book.Hash,
+			SizeByMB:    float64(book.FileSize) / float64(1024*1024),
+			Author:      book.Author,
+			HasCover:    info.HasCover(),
+			CoverFormat: coverFormat,
+		}
+
+		model.DB.Create(&epubRecord)
+
+	}
+
+	model.DB.Model(userRecord).Association("Books").Append(
+		model.Book{
+			Epub: epubRecord,
+		},
+	)
+
+	defer func() {
+		archiver.Zip.Open(storeName, storeFolder)
+		os.Remove(storeName)
+	}()
 
 	return nil
 }

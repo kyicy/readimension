@@ -8,9 +8,9 @@ import (
 // User is related to `users` table in mysql database
 type User struct {
 	gorm.Model
-	Name      string
-	Email     string `gorm:"type:varchar(100);unique_index"`
-	Password  string `gorm:"type:varchar(255)"`
+	Name      string `gorm:"not null"`
+	Email     string `gorm:"type:varchar(100);unique_index;not null"`
+	Password  string `gorm:"type:varchar(255);not null"`
 	Books     []Book
 	Lists     []List
 	Raindrops []Raindrop
