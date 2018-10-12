@@ -47,6 +47,12 @@ type configStruct map[string]struct {
 		Size     int    `json:"size"`
 		DB       int    `json:"db"`
 	} `json:"redis"`
+
+	SMTP struct {
+		Sender   string `json:"sender"`
+		Password string `json:"password"`
+		SMTP     string `json:"smtp"`
+	}
 }
 
 func main() {
@@ -88,7 +94,8 @@ func main() {
 	model.LoadModel(db)
 
 	// Setup Postman
-	utility.SetUpMailer(env)
+	smtpConf := envConfig.SMTP
+	utility.SetUpMailer(env, smtpConf.Sender, smtpConf.Password, smtpConf.SMTP)
 
 	// Create Echo Server Instance
 	e := createInstance(env)

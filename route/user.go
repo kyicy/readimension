@@ -78,7 +78,7 @@ func postSignUp(c echo.Context) error {
 	})
 	utility.RedisClient.Expire(v4UUID.String(), time.Minute*30)
 
-	utility.Postman.Send(u.Username, u.Email, v4UUID.String())
+	utility.Postman.SendVerification(u.Username, u.Email, v4UUID.String())
 
 	return c.Redirect(http.StatusSeeOther, "/to-be-activated")
 }

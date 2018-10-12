@@ -3,18 +3,25 @@ package utility
 import (
 	"bytes"
 	"html/template"
-	"os/exec"
+	"log"
+	"net/smtp"
 )
 
 type mailer struct {
-	env string
+	env      string
+	sender   string
+	password string
+	smtp     string
 }
 
 var Postman *mailer
 
-func SetUpMailer(env string) {
+func SetUpMailer(env, sender, password, smtp string) {
 	Postman = new(mailer)
 	Postman.env = env
+	Postman.sender = sender
+	Postman.password = password
+	Postman.smtp = smtp
 }
 
 var mailTpl = `
@@ -34,12 +41,11 @@ type tplBind struct {
 	UUID     string
 }
 
-func (m *mailer) Send(username, email, uuid string) {
+func (m *mailer) SendVerification(username, email, uuid string) {
 	if m.env != "production" {
 		return
 	}
 	t, _ := template.New("tml").Parse(mailTpl)
-	cmd := exec.Command("mail", "-a", "Content-type: text/html", "-s", "verify your email", email)
 
 	data := tplBind{
 		username, uuid,
@@ -48,7 +54,19 @@ func (m *mailer) Send(username, email, uuid string) {
 	buf := bytes.NewBuffer([]byte{})
 	t.ExecuteTemplate(buf, "T", &data)
 
-	cmd.Stdin = buf
-	cmd.Start()
-	cmd.Wait()
+	auth := smtp.PlainAuth("", Postman.sender, Postman.password, Postman.smtp)
+
+	to := []string{email}
+	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
+
+	msg := []byte(
+		"Subject: verify your email\r\n" +
+			mime +
+			buf.String() + "\r\n")
+
+	err := smtp.SendMail(Postman.smtp+":25", auth, Postman.sender, to, msg)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
