@@ -82,8 +82,6 @@ func Register(e *echo.Echo) {
 	e.GET("/", getBooks, mw.UserAuth)
 
 	userGroup := e.Group("/u", mw.UserAuth)
-	userGroup.Static("/covers", "covers")
-	userGroup.Static("/books", "books")
 
 	userGroup.GET("/stream", getBooks)
 	userGroup.GET("/books", getBooks)
