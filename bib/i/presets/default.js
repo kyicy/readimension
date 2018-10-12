@@ -73,18 +73,18 @@ Bibi.Preset = {
         // },
         {
             "name": "Analytics",
-            "src": "extensions/analytics/analytics.js",
+            "src": "/u/i/extensions/analytics/analytics.js",
             "tracking-id": "UA-127108613-1"
         }, // "tracking-id": Your own Google Analytics tracking id, as "UA-********-*"
         {
             "name": "FontSize",
-            "src": "extensions/fontsize/fontsize.js",
+            "src": "/u/i/extensions/fontsize/fontsize.js",
             "base": "auto",
             "scale-per-step": 1.25
         }, // "base": "auto" or pixel-number (if you want to change the default font-size based on the size used most frequently in each HTML)
         {
             "name": "Loupe",
-            "src": "extensions/loupe/loupe.js",
+            "src": "/u/i/extensions/loupe/loupe.js",
             "mode": "",
             "max-scale": 4
         },

@@ -105,7 +105,7 @@ func Register(e *echo.Echo) {
 		})
 		return nil
 	})
-	userGroup.GET("/i/", func(c echo.Context) error {
+	userGroup.GET("/i", func(c echo.Context) error {
 		c.Response().Header().Set("Cache-Control", "max-age=3600")
 		r := box.String("i/index.html")
 		return c.HTML(http.StatusOK, r)
