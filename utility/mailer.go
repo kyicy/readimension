@@ -60,7 +60,9 @@ func (m *mailer) SendVerification(username, email, uuid string) {
 	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
 
 	msg := []byte(
-		"Subject: verify your email\r\n" +
+		"From: " + Postman.sender + "\r\n" +
+			"To: " + email + "\r\n" +
+			"Subject: verify your email\r\n" +
 			mime +
 			buf.String() + "\r\n")
 
