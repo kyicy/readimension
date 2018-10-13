@@ -71,11 +71,11 @@ Bibi.Preset = {
         // "name": "Unzipper",
         // "src": "extensions/unzipper/unzipper.js"
         // },
-        {
-            "name": "Analytics",
-            "src": "/u/i/extensions/analytics/analytics.js",
-            "tracking-id": "UA-127108613-1"
-        }, // "tracking-id": Your own Google Analytics tracking id, as "UA-********-*"
+        // {
+        // "name": "Analytics",
+        // "src": "/u/i/extensions/analytics/analytics.js",
+        // "tracking-id": "UA-127108613-1"
+        // }, // "tracking-id": Your own Google Analytics tracking id, as "UA-********-*"
         {
             "name": "FontSize",
             "src": "/u/i/extensions/fontsize/fontsize.js",
