@@ -7,11 +7,10 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/packr"
+	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/route"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-
-	mw "github.com/kyicy/readimension/middleware"
 )
 
 func createInstance(env string) *echo.Echo {
@@ -31,6 +30,8 @@ func createInstance(env string) *echo.Echo {
 		e.Use(mw.Minify)
 	} else {
 		e.Static("/", "public")
+		e.Static("/covers", "covers")
+		e.Static("/books", "books")
 	}
 
 	route.Register(e)

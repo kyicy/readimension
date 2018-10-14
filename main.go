@@ -52,7 +52,7 @@ type configStruct map[string]struct {
 		Sender   string `json:"sender"`
 		Password string `json:"password"`
 		SMTP     string `json:"smtp"`
-	}
+	} `json:"smtp"`
 }
 
 func main() {

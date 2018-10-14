@@ -14,10 +14,9 @@ import (
 	"strconv"
 
 	"github.com/kyicy/readimension/model"
-	"github.com/mholt/archiver"
-
 	"github.com/kyicy/readimension/utility/epub"
 	"github.com/labstack/echo"
+	"github.com/mholt/archiver"
 )
 
 type getBooksData struct {
@@ -165,7 +164,6 @@ func postChunksDone(c echo.Context) error {
 		writeHTTPResponse(w, http.StatusInternalServerError, err)
 		return nil
 	}
-	defer f.Close()
 
 	var totalWritten int64
 	for i := 0; i < totalParts; i++ {
@@ -192,6 +190,8 @@ func postChunksDone(c echo.Context) error {
 		errorMsg := fmt.Sprintf("Total file size mistmatch, expected %d bytes but actual is %d", totalFileSize, totalWritten)
 		http.Error(w, errorMsg, http.StatusMethodNotAllowed)
 	}
+
+	f.Close()
 
 	return afterUpload(c, finalFilename)
 }
@@ -231,6 +231,7 @@ func afterUpload(c echo.Context, fileName string) error {
 			coverFormat = format
 
 			file, err := os.Create("covers/" + book.Hash + "." + format)
+			defer file.Close()
 			if err != nil {
 				return err
 			}
@@ -245,7 +246,10 @@ func afterUpload(c echo.Context, fileName string) error {
 			}
 		}
 		os.MkdirAll("books", 0777)
-		os.Rename(fileName, storeName)
+
+		if err := os.Rename(fileName, storeName); err != nil {
+			c.Logger().Error(err)
+		}
 
 		epubRecord = model.Epub{
 			Title:       book.Title,
@@ -267,8 +271,12 @@ func afterUpload(c echo.Context, fileName string) error {
 	)
 
 	defer func() {
-		archiver.Zip.Open(storeName, storeFolder)
-		os.Remove(storeName)
+		if err := archiver.Zip.Open(storeName, storeFolder); err != nil {
+			c.Logger().Error(err)
+		}
+		if err := os.Remove(storeName); err != nil {
+			c.Logger().Error(err)
+		}
 	}()
 
 	return nil

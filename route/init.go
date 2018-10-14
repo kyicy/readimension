@@ -10,12 +10,11 @@ import (
 
 	"github.com/gobuffalo/packr"
 	"github.com/gorilla/sessions"
+	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/model"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
 	"gopkg.in/go-playground/validator.v9"
-
-	mw "github.com/kyicy/readimension/middleware"
 )
 
 type userData map[string]string
@@ -106,6 +105,12 @@ func Register(e *echo.Echo) {
 		return nil
 	})
 	userGroup.GET("/i", func(c echo.Context) error {
+		c.Response().Header().Set("Cache-Control", "max-age=3600")
+		r := box.String("i/index.html")
+		return c.HTML(http.StatusOK, r)
+	})
+
+	userGroup.GET("/i/", func(c echo.Context) error {
 		c.Response().Header().Set("Cache-Control", "max-age=3600")
 		r := box.String("i/index.html")
 		return c.HTML(http.StatusOK, r)
