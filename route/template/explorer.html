@@ -6,12 +6,17 @@
 {{template "aside" .}}
 <section class="explorer">
 
-    <div for="create list">
-        <form class="pure-form" method="post">
+    <div for="control">
+        <form class="pure-form new-list">
             <input type="text" name="name"  placeholder="Folder Name" required maxlength="100">
-            <input class="pure-button" type="submit" value="Add Folder">
+            <input class="pure-button" type="submit" value="New Folder">
         </form>
+        <button class="new-book pure-button">New Book</button>
     </div>
+
+    <div for="upload-books" style="display: none;">
+        {{template "books/new" .}}
+    </div>    
 
     <div for="show-lists">
     </div>
@@ -20,17 +25,11 @@
         {{template "books" .List}}
     </div>
 
-    <div for="explorer control">
-        <button class="new-book pure-button">New Book</button>
-    </div>
 
-    <div for="upload-books" style="display: none;">
-        {{template "books/new" .}}
-    </div>
 </section>
 
 <script>
-    var newListEndPoint ="/u/{{.List.ID}}/lists/new"
+    var newListEndPoint ="/u/lists/{{.List.ID}}/child/new"
 </script>
 
 <script src="/scripts/explorer.js"></script>

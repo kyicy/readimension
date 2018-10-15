@@ -1,13 +1,10 @@
 @import url("/styles/common.css");
-section.explorer div[for="explorer control"] button {
-  margin: 1px 13px;
-}
-section.explorer div[for="create list"] form {
+section.explorer div[for=control] {
   display: flex;
   justify-content: flex-start;
   margin: 15px;
 }
-section.explorer div[for="create list"] form * {
+section.explorer div[for=control] * {
   margin: 0px 1px;
 }
 

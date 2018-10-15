@@ -89,6 +89,8 @@ func Register(e *echo.Echo) {
 	userGroup.POST("/:list_id/books/new", postBooksNew)
 	userGroup.POST("/:list_id/books/new/chunksdone", postChunksDone)
 
+	userGroup.POST("/lists/:id/child/new", postListChildNew)
+
 	box := packr.NewBox("../bib")
 	box.Walk(func(path string, f packr.File) error {
 		extName := filepath.Ext(path)

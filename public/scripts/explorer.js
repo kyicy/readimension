@@ -1,5 +1,5 @@
 function bindNewBookButtion() {
-    let newBookButton = document.querySelector("div[for='explorer control'] .new-book")
+    let newBookButton = document.querySelector("div[for='control'] .new-book")
     let uploaderSection = document.querySelector("div[for=upload-books]")
     newBookButton.addEventListener("click", function () {
         let display = uploaderSection.style.display;
@@ -10,7 +10,7 @@ function bindNewBookButtion() {
 }
 
 function bindNewFolderForm() {
-    let form = document.querySelector("div[for='create list'] form")
+    let form = document.querySelector("div[for='control'] form")
 
     form.addEventListener("submit", function (evt) {
         evt.preventDefault()
@@ -21,11 +21,11 @@ function bindNewFolderForm() {
         let request = new XMLHttpRequest();
         request.open('POST', newListEndPoint, true);
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-        request.send(JSON.stringify(data));
+        request.send(JSON.stringify({name}));
 
         request.onload = function () {
             if (request.status >= 200 && request.status < 400) {
-                data = JSON.parse(request.responseText)
+                // data = JSON.parse(request.responseText)
                 put2Lists(data)
 
             } else {
