@@ -3,11 +3,20 @@ section.explorer div[for=control] {
   display: flex;
   justify-content: flex-start;
   margin: 15px;
+  flex-wrap: wrap;
 }
-section.explorer div[for=control] * {
-  margin: 0px 1px;
+section.explorer div[for=control] form {
+  margin: 2px;
+}
+section.explorer div[for=control] > button {
+  margin: 2px;
 }
 
+@media only screen and (max-width: 600px) {
+  section.explorer div[for=control] {
+    margin-top: -20px;
+  }
+}
 body {
   display: grid;
   grid-template: 50px 1fr/1fr;
@@ -25,6 +34,10 @@ main {
     grid-template: 120px 1fr/1fr;
     margin-top: 5px;
   }
+
+  aside[role=left-nav] {
+    padding: 5px 17px;
+  }
 }
 @media only screen and (min-width: 601px) {
   main {
@@ -32,15 +45,15 @@ main {
     grid-template: 1fr/200px 1fr;
     margin-top: 30px;
   }
+
+  aside[role=left-nav] {
+    padding: 10px 25px;
+  }
 }
 div[role=book-shelf] {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
-}
-
-aside[role=left-nav] {
-  padding: 10px 25px;
 }
 
 aside[role=left-nav] > hr {

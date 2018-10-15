@@ -4,9 +4,24 @@ section.explorer {
         display: flex;
         justify-content: flex-start;
         margin: 15px;
+        flex-wrap: wrap;
 
-        & * {
-            margin: 0px 1px;
+        form {
+            margin: 2px;
+        }
+
+        &>button {
+            margin: 2px;
+        }
+
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    section.explorer {
+
+        div[for="control"] {
+            margin-top: -20px;
         }
     }
 }
