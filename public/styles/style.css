@@ -6,6 +6,11 @@ section.explorer div[for=control] {
   flex-wrap: wrap;
 }
 section.explorer div[for=control] form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+section.explorer div[for=control] form * {
   margin: 2px;
 }
 section.explorer div[for=control] > button {
@@ -38,6 +43,10 @@ main {
   aside[role=left-nav] {
     padding: 5px 17px;
   }
+
+  .book {
+    margin: 10px 10px;
+  }
 }
 @media only screen and (min-width: 601px) {
   main {
@@ -48,6 +57,10 @@ main {
 
   aside[role=left-nav] {
     padding: 10px 25px;
+  }
+
+  .book {
+    margin: 10px 15px;
   }
 }
 div[role=book-shelf] {
@@ -105,7 +118,6 @@ div[role=aside-menu] > span:not(:first-child):hover {
   display: inline-flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 10px 15px;
 }
 .book a img {
   width: 160px;

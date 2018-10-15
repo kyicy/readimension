@@ -24,7 +24,9 @@ main {
     aside[role=left-nav] {
         padding: 5px 17px;
     }
-    
+    .book {
+        margin: 10px 10px;
+    }
 }
 
 @media only screen and (min-width: 601px) {
@@ -37,7 +39,10 @@ main {
     aside[role=left-nav] {
         padding: 10px 25px;
     }
-    
+
+    .book {
+        margin: 10px 15px;
+    }
 }
 
 
@@ -103,7 +108,6 @@ div[role=aside-menu] {
     display: inline-flex;
     flex-direction: column;
     justify-content: flex-start;
-    margin: 10px 15px;
 
     a img {
         width: 160px;

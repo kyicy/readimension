@@ -7,7 +7,12 @@ section.explorer {
         flex-wrap: wrap;
 
         form {
-            margin: 2px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            * {
+                margin: 2px;
+            }
         }
 
         &>button {
