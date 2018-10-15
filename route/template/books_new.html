@@ -1,7 +1,4 @@
 {{define "books/new"}}
-{{template "header" .}}
-<link rel="stylesheet" href="/styles/style.css">
-{{template "aside" .}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.16.2/all.fine-uploader/all.fine-uploader.min.js"
     integrity="sha256-v9au6P0m49eWQchR2OL5FlsBznSOwtpDphH1Mg9XJrw=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.16.2/all.fine-uploader/fine-uploader-gallery.min.css"
@@ -20,8 +17,18 @@
 
     #fine-uploader-gallery {
         background-color: white;
-        min-width: 400px;
     }
+    @media only screen and (max-width: 600px) {
+        #fine-uploader-gallery {
+            width: 90%;
+        }
+    }
+
+    @media only screen and (min-width: 601px) {
+        #fine-uploader-gallery {
+            min-width: 400px;
+        }
+    }    
 </style>
 <!--
     Read the "Getting Started Guide" at http://docs.fineuploader.com/quickstart/01-getting-started.html
@@ -110,7 +117,7 @@
         element: document.getElementById("fine-uploader-gallery"),
         template: 'qq-template',
         request: {
-            endpoint: '/u/books/new'
+            endpoint: '/u/{{.List.ID}}/books/new'
         },
         chunking: {
             concurrent: {
@@ -118,14 +125,20 @@
             },
             enabled: true,
             success: {
-                endpoint: "/u/books/new/chunksdone"
+                endpoint: "/u/{{.List.ID}}/books/new/chunksdone"
             }
         },
         validation: {
             allowedExtensions: ['epub'],
             sizeLimit: 128 * 1024 * 1024,
-        }
+        },
+        callbacks: {
+            onAllComplete: function(lucky, unlucky) {
+                if (unlucky.length === 0) {
+                    location.reload()
+                }
+            },
+        },
     });
 </script>
-{{template "footer" .}}
 {{end}}

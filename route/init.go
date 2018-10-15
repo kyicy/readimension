@@ -78,19 +78,16 @@ func Register(e *echo.Echo) {
 	e.GET("/activate/:uuid", getActivate)
 	e.GET("/sign-out", getSignOut)
 
-	e.GET("/", getBooks, mw.UserAuth)
+	e.GET("/", getExplorerRoot, mw.UserAuth)
 
 	userGroup := e.Group("/u", mw.UserAuth)
 
-	userGroup.GET("/stream", getBooks)
-	userGroup.GET("/books", getBooks)
+	userGroup.GET("/explorer", getExplorerRoot)
+	userGroup.GET("/explorer/:id", getExplorer)
+	userGroup.GET("/explorer", getExplorerRoot)
 
-	userGroup.GET("/books/new", getBooksNew)
-	userGroup.POST("/books/new", postBooksNew)
-	userGroup.POST("/books/new/chunksdone", postChunksDone)
-
-	userGroup.GET("/lists", getLists)
-	userGroup.GET("/lists/new", getListsNew)
+	userGroup.POST("/:list_id/books/new", postBooksNew)
+	userGroup.POST("/:list_id/books/new/chunksdone", postChunksDone)
 
 	box := packr.NewBox("../bib")
 	box.Walk(func(path string, f packr.File) error {

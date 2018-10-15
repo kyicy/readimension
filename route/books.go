@@ -19,28 +19,35 @@ import (
 	"github.com/mholt/archiver"
 )
 
-type getBooksData struct {
-	*TempalteCommon
-	Books []model.Book
-}
-
-func getBooks(c echo.Context) error {
-	tc := newTemplateCommon(c, "Books")
-	data := &getBooksData{}
-	data.TempalteCommon = tc
-
-	var books []model.Book
-
+func getExplorerRoot(c echo.Context) error {
 	userID, err := getSessionUserID(c)
 	if err != nil {
 		return err
 	}
+	var user model.User
+	model.DB.Where("id = ?", userID).Find(&user)
 
-	model.DB.Where("user_id = ?", userID).Preload("Epub").Find(&books)
+	return c.Redirect(http.StatusFound, fmt.Sprintf("/u/explorer/%v", user.ListID))
+}
 
-	data.Books = books
+type getBooksData struct {
+	*TempalteCommon
+	List model.List
+}
 
-	return c.Render(http.StatusOK, "books", data)
+func getExplorer(c echo.Context) error {
+	id := c.Param("id")
+
+	tc := newTemplateCommon(c, "Books")
+	data := &getBooksData{}
+	data.TempalteCommon = tc
+	data.Active = "/u/explorer"
+
+	var list model.List
+	model.DB.Where("id = ?", id).Preload("Epubs").Preload("Children").Find(&list)
+	data.List = list
+
+	return c.Render(http.StatusOK, "explorer", data)
 }
 
 func getBooksNew(c echo.Context) error {
@@ -197,6 +204,7 @@ func postChunksDone(c echo.Context) error {
 }
 
 func afterUpload(c echo.Context, fileName string) error {
+	listID := c.Param("list_id")
 	defer func() {
 		// remove upload folder
 		path := filepath.Dir(fileName)
@@ -206,11 +214,6 @@ func afterUpload(c echo.Context, fileName string) error {
 	info, err := epub.Load(fileName)
 
 	// not a epub file
-	if err != nil {
-		return err
-	}
-
-	userRecord, err := getSessionUser(c)
 	if err != nil {
 		return err
 	}
@@ -264,11 +267,11 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	}
 
-	model.DB.Model(userRecord).Association("Books").Append(
-		model.Book{
-			Epub: epubRecord,
-		},
-	)
+	var list model.List
+
+	model.DB.Where("id = ?", listID).Find(&list)
+
+	model.DB.Model(list).Association("Epubs").Append(epubRecord)
 
 	defer func() {
 		if err := archiver.Zip.Open(storeName, storeFolder); err != nil {

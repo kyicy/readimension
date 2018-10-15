@@ -119,6 +119,9 @@ func getActivate(c echo.Context) error {
 		Name:     username,
 		Email:    email,
 		Password: password,
+		List: model.List{
+			Name: fmt.Sprintf("/home/%s", username),
+		},
 	}
 
 	model.DB.Create(&registerUser)
@@ -189,7 +192,7 @@ func postSignIn(c echo.Context) error {
 func getSignOut(c echo.Context) error {
 	tc := newTemplateCommon(c, "")
 	tc.logout()
-	return c.Redirect(http.StatusSeeOther, "/")
+	return c.Redirect(http.StatusFound, "/")
 }
 
 func getToBeActivated(c echo.Context) error {

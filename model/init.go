@@ -11,9 +11,7 @@ var DB *gorm.DB
 func LoadModel(db *gorm.DB) {
 	DB = db
 	DB.AutoMigrate(
-		&Book{},
 		&Epub{},
 		&List{},
-		&Raindrop{},
 		&User{})
 }

@@ -1,0 +1,31 @@
+{{define "explorer"}}
+{{template "header" .}}
+<link rel="stylesheet" href="/styles/style.css">
+<script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+
+{{template "aside" .}}
+<section>
+    <div for="show-lists">
+    </div>
+
+    <div for="show-books">
+        {{template "books" .List}}
+    </div>
+
+    <div for="control">
+        <span>add list</span>
+        <span>add book</span>
+    </div>
+
+    <div for="upload-books">
+        {{template "books/new" .}}
+    </div>
+
+    <style>
+        div[for="upload-books"]{
+            display: none;
+        }
+    </style>
+</section>
+{{template "footer" .}}
+{{end}}
