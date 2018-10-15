@@ -1,134 +1,128 @@
 @import url("/styles/common.css");
-
+section.explorer div[for="explorer control"] button {
+  margin: 1px 13px;
+}
+section.explorer div[for="create list"] form {
+  display: flex;
+  justify-content: flex-start;
+  margin: 15px;
+}
+section.explorer div[for="create list"] form * {
+  margin: 0px 1px;
+}
 
 body {
-    display: grid;
-    grid-template: 50px 1fr / 1fr
+  display: grid;
+  grid-template: 50px 1fr/1fr;
 }
 
 main {
-    display: grid;
-    grid-template: 1fr / 200px 1fr;
-    margin-top: 30px;
-
+  display: grid;
+  grid-template: 1fr/200px 1fr;
+  margin-top: 30px;
 }
 
 @media only screen and (max-width: 600px) {
-    main {
-        display: grid;
-        grid-template: 120px 1fr /  1fr;
-        margin-top: 5px;
-    
-    }
+  main {
+    display: grid;
+    grid-template: 120px 1fr/1fr;
+    margin-top: 5px;
+  }
 }
-
 @media only screen and (min-width: 601px) {
-    main {
-        display: grid;
-        grid-template: 1fr / 200px 1fr;
-        margin-top: 30px;
-    }
+  main {
+    display: grid;
+    grid-template: 1fr/200px 1fr;
+    margin-top: 30px;
+  }
 }
-
-
 div[role=book-shelf] {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
 }
 
 aside[role=left-nav] {
-    padding: 10px 25px;
+  padding: 10px 25px;
 }
 
-aside[role=left-nav]>hr {
-    margin: 30px 0px 30px 5px;
-    padding-left: 5px;
+aside[role=left-nav] > hr {
+  margin: 30px 0px 30px 5px;
+  padding-left: 5px;
 }
 
 div[role=aside-menu] {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
-
-div[role=aside-menu]>span {
-    display: flex;
-    align-items: center;
-    margin: 2px 0px;
-    font-size: 1.1em;
-    color: rgb(87, 87, 87);
-    padding-left: 5px;
-    line-height: 2;
+div[role=aside-menu] > span {
+  display: flex;
+  align-items: center;
+  margin: 2px 0px;
+  font-size: 1.1em;
+  color: #575757;
+  padding-left: 5px;
+  line-height: 2;
 }
-
-div[role=aside-menu]>span.active {
-    background-color: rgb(220, 220, 220);
+div[role=aside-menu] > span:first-child {
+  color: #6e6e6e;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  margin-top: 0px;
 }
-
-div[role=aside-menu]>span:not(:first-child):hover {
-    background-color: rgb(220, 220, 220);
+div[role=aside-menu] > span i {
+  margin-right: 7px;
+  font-size: 1.1em;
 }
-
-div[role=aside-menu]>span i {
-    margin-right: 7px;
-    font-size: 1.1em;
+div[role=aside-menu] > span a {
+  color: #575757;
+  text-decoration: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
-
-div[role=aside-menu]>span a {
-    color: rgb(87, 87, 87);
-    text-decoration: none;
-    width: 100%;
-    display: flex;
-    align-items: center;
+div[role=aside-menu] > span.active {
+  background-color: gainsboro;
 }
-
-div[role=aside-menu]>span:first-child {
-    color: rgb(110, 110, 110);
-    text-transform: uppercase;
-    margin-bottom: 10px;
-    margin-top: 0px;
+div[role=aside-menu] > span:not(:first-child):hover {
+  background-color: gainsboro;
 }
 
 .book {
-    width: 160px;
-    height: 245px;
-    box-shadow: 0 0 2px #bbb;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    margin: 10px 15px;
+  width: 160px;
+  height: 245px;
+  box-shadow: 0 0 2px #bbb;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 10px 15px;
 }
-
 .book a img {
-    width: 160px;
-    height: 200px;
+  width: 160px;
+  height: 200px;
 }
-
-.book>span {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    margin: 5px 3px 0px 3px;
+.book > span {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 5px 3px 0px 3px;
 }
-
-.book>span:first-of-type {
-    color: rgb(87, 87, 87);
-    font-size: 0.8em;
+.book > span:first-of-type {
+  color: #575757;
+  font-size: 0.8em;
 }
-
-.book>span:last-child {
-    color: rgb(110, 110, 110);
-    font-size: 0.7em;
+.book > span:last-child {
+  color: #6e6e6e;
+  font-size: 0.7em;
 }
 
 footer {
-    display: flex;
-    justify-content: center;
-    line-height: 2em;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  line-height: 2em;
+  align-items: center;
 }
-
-footer a {
-    color: rgb(87, 87, 87);
-    text-decoration: none;
+footer footer a {
+  color: #575757;
+  text-decoration: none;
 }

@@ -4,7 +4,15 @@
 <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
 
 {{template "aside" .}}
-<section>
+<section class="explorer">
+
+    <div for="create list">
+        <form class="pure-form" method="post">
+            <input type="text" name="name"  placeholder="Folder Name" required maxlength="100">
+            <input class="pure-button" type="submit" value="Add Folder">
+        </form>
+    </div>
+
     <div for="show-lists">
     </div>
 
@@ -12,20 +20,20 @@
         {{template "books" .List}}
     </div>
 
-    <div for="control">
-        <span>add list</span>
-        <span>add book</span>
+    <div for="explorer control">
+        <button class="new-book pure-button">New Book</button>
     </div>
 
-    <div for="upload-books">
+    <div for="upload-books" style="display: none;">
         {{template "books/new" .}}
     </div>
-
-    <style>
-        div[for="upload-books"]{
-            display: none;
-        }
-    </style>
 </section>
+
+<script>
+    var newListEndPoint ="/u/{{.List.ID}}/lists/new"
+</script>
+
+<script src="/scripts/explorer.js"></script>
+
 {{template "footer" .}}
 {{end}}

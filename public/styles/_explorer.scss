@@ -1,0 +1,20 @@
+section.explorer {
+
+    div[for="explorer control"] {
+        button {
+            margin: 1px 13px;
+        }
+    }
+
+    div[for="create list"] {
+        form {
+            display: flex;
+            justify-content: flex-start;
+            margin: 15px;
+
+            & * {
+                margin: 0px 1px;
+            }
+        }
+    }
+}
