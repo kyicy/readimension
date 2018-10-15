@@ -16,4 +16,6 @@ type List struct {
 	DownVote uint `gorm:"default:0"`
 
 	Raindrops []Raindrop
+
+	Children []*List `gorm:"many2many:ownerships;association_jointable_foreignkey:child_id"`
 }
