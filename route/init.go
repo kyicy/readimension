@@ -83,7 +83,8 @@ func Register(e *echo.Echo) {
 	userGroup := e.Group("/u", mw.UserAuth)
 
 	userGroup.GET("/explorer", getExplorerRoot)
-	userGroup.GET("/explorer/:id", getExplorer)
+	userGroup.DELETE("/explorer/:list_id", deleteExplorer)
+	userGroup.GET("/explorer/:list_id", getExplorer)
 	userGroup.GET("/explorer", getExplorerRoot)
 
 	userGroup.POST("/:list_id/books/new", postBooksNew)

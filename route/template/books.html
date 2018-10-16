@@ -2,7 +2,7 @@
     <div role="book-shelf">
         {{with .Epubs}}
             {{range .}}
-                <div class="book">
+                <div class="book selectable" data-id={{.ID}}>
                     {{if .HasCover}}
                         <a href="/u/i/?book={{.SHA256}}" target="_blank"><img src="{{.CoverPath}}" alt=""></a>
                     {{else}}

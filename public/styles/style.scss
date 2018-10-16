@@ -53,10 +53,14 @@ div[role=book-shelf] {
 }
 
 
-aside[role=left-nav]>hr {
-    margin: 30px 0px 30px 5px;
-    padding-left: 5px;
+aside[role=left-nav] {
+    user-select: none;
+    &>hr {
+        margin: 30px 0px 30px 5px;
+        padding-left: 5px;
+    }
 }
+
 
 div[role=aside-menu] {
     display: flex;

@@ -15,4 +15,6 @@ type List struct {
 
 	Children []*List `gorm:"many2many:ownerships;association_jointable_foreignkey:child_id"`
 	ParentID uint    `gorm:"default:0"`
+
+	User uint
 }

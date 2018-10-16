@@ -1,9 +1,20 @@
 @import url("/styles/common.css");
+section.explorer .selectable.selected {
+  -webkit-box-shadow: 0 0.05em 0.2em 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.05em 0.2em 0 rgba(0, 0, 0, 0.2);
+  background: #7fa0eb;
+}
+section.explorer .selection {
+  background: rgba(0, 0, 255, 0.1);
+  border-radius: 0.1em;
+  border: 0.05em solid rgba(0, 0, 255, 0.2);
+}
 section.explorer div[for=control] {
   display: flex;
   justify-content: flex-start;
   margin: 15px;
   flex-wrap: wrap;
+  user-select: none;
 }
 section.explorer div[for=control] form {
   display: flex;
@@ -105,6 +116,9 @@ div[role=book-shelf] {
   justify-content: flex-start;
 }
 
+aside[role=left-nav] {
+  user-select: none;
+}
 aside[role=left-nav] > hr {
   margin: 30px 0px 30px 5px;
   padding-left: 5px;

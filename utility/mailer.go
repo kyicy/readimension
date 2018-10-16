@@ -46,6 +46,10 @@ type tplBind struct {
 
 func (m *mailer) SendVerification(username, email, uuid string) {
 
+	if Postman.env != "production" {
+		return
+	}
+
 	t, _ := template.New("tml").Parse(mailTpl)
 	data := tplBind{
 		username, uuid,

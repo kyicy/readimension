@@ -1,6 +1,7 @@
 {{define "explorer"}}
 {{template "header" .}}
 <link rel="stylesheet" href="/styles/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/selection-js/dist/selection.min.js"></script>
 
 {{template "aside" .}}
 <section class="explorer">
@@ -15,6 +16,7 @@
         </form>
         <button class="new-list pure-button">New Folder</button>
         <button class="new-book pure-button">New Book</button>
+        <button class="remove pure-button" style="display: none;">remove</button>
     </div>
 
     <div for="upload-books" style="display: none;">
@@ -25,7 +27,7 @@
         <div role="lists">
             {{with .List.Children}}
                 {{range .}}
-                    <div class="list-child">
+                    <div class="list-child selectable" data-id={{.ID}}>
                         <a href="/u/explorer/{{.ID}}">
                             <i class="material-icons">
                                     folder
@@ -47,6 +49,7 @@
 
 <script>
     var newListEndPoint ="/u/lists/{{.List.ID}}/child/new"
+    var currentList = "{{.List.ID}}"
 </script>
 
 <script src="/scripts/explorer.js"></script>

@@ -119,12 +119,17 @@ func getActivate(c echo.Context) error {
 		Name:     username,
 		Email:    email,
 		Password: password,
-		List: model.List{
-			Name: fmt.Sprintf("/home/%s", username),
-		},
 	}
 
 	model.DB.Create(&registerUser)
+
+	list := model.List{
+		Name: fmt.Sprintf("/home/%s", username),
+		User: registerUser.ID,
+	}
+
+	model.DB.Create(&list)
+	model.DB.Model(&registerUser).Association("List").Replace(list)
 
 	tc.login(&registerUser)
 	data.Message = fmt.Sprintf("Welcome! %s(%s). May the force be with you", username, email)

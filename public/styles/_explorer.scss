@@ -1,10 +1,24 @@
 section.explorer {
 
+    .selectable.selected {
+        -webkit-box-shadow: 0 0.05em 0.2em 0 rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0.05em 0.2em 0 rgba(0, 0, 0, 0.2);
+        background: #7fa0eb;
+
+    }
+    
+    .selection {
+        background: rgba(0, 0, 255, 0.1);
+        border-radius: 0.1em;
+        border: 0.05em solid rgba(0, 0, 255, 0.2);
+    }
+
     div[for="control"] {
         display: flex;
         justify-content: flex-start;
         margin: 15px;
         flex-wrap: wrap;
+        user-select: none;
 
         form {
             display: flex;
