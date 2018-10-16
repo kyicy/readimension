@@ -19,9 +19,9 @@
             "db": 7
         },
         "smtp": {
-            "sender": "",
+            "sender": "sender@example.com",
             "password": "",
-            "smtp": ""
+            "smtp": "host:port"
         }
     },
 
@@ -45,9 +45,9 @@
             "db": 7
         },
         "smtp": {
-            "sender": "",
+            "sender": "email@example.com",
             "password": "",
-            "smtp": ""
+            "smtp": "host:port"
         }
     }
 }
