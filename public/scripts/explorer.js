@@ -52,7 +52,8 @@ function put2Lists(data) {
         id
     } = data;
     let divEle = document.createElement("div")
-    divEle.className = "list-child"
+    divEle.classList.add("list-child", "selectable")
+    divEle.dataset.id = id
     divEle.innerHTML = `<a href="/u/explorer/${id}"><i class="material-icons">folder</i></a><span>${name}<span>`
 
     let container = document.querySelector("[for=show-lists] [role=lists]").appendChild(divEle)

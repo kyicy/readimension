@@ -235,6 +235,17 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	model.DB.Model(list).Association("Epubs").Append(epubRecord)
 
+	userIDStr, _ := getSessionUserID(c)
+
+	userID, _ := strconv.Atoi(userIDStr)
+	ule := model.UserListEpub{
+		UserID: uint(userID),
+		ListID: list.ID,
+		EpubID: epubRecord.ID,
+	}
+
+	model.DB.Create(&ule)
+
 	if err := archiver.Zip.Open(storeName, storeFolder); err != nil {
 		c.Logger().Error(err)
 	}

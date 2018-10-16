@@ -54,12 +54,19 @@ func deleteExplorer(c echo.Context) error {
 
 	userID, _ := getSessionUserID(c)
 
+	// remove child lists
 	model.DB.Where("parent_id = ? and user = ?", parentListID, userID).Delete(model.List{})
+
+	// remove associated epubs
 	var parentList model.List
 	model.DB.Where("user = ? and id = ?", userID, parentListID).Find(&parentList)
 	var epubs []model.Epub
 	model.DB.Where("id in (?)", _body.Books).Find(&epubs)
 	model.DB.Model(&parentList).Association("Epubs").Delete(epubs)
+	model.DB.
+		Where("user_id = ? and list_id = ? and epub_id in (?)",
+			userID, parentListID, _body.Books).
+		Delete(model.UserListEpub{})
 
 	return c.String(http.StatusOK, "")
 }
