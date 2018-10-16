@@ -97,7 +97,13 @@ function bindSelection() {
         // The container is also the boundary in this case
         boundaries: ['[for=show-lists', '[for=show-books]'],
 
+
+
         onSelect(evt) {
+            let target = evt.target
+            if (target.tagName === "A") {
+                return location.href = target.href
+            }
             eleRoot = getEleRoot(evt.target)
             // Check if clicked element is already selected
             const selected = eleRoot.classList.contains('selected');
