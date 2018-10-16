@@ -20,6 +20,35 @@ section.explorer {
         }
 
     }
+
+    div[for="show-lists"] {
+        div[role="lists"] {
+            display: flex;
+            .list-child {
+                display: flex;
+                flex-direction: column;
+                box-shadow: 0 0 2px #bbb;
+                align-items: center;
+                max-width: 160px;
+                a {
+                    text-decoration: none;
+                    i {
+                        font-size: 5em;
+                        color: rgb(140, 210, 240)
+                    }
+                }
+
+                span {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    margin: 0px 3px 3px 3px;
+                    color: rgb(87, 87, 87);
+                    font-size: 0.8em;
+                }
+            }
+        }
+    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -28,5 +57,30 @@ section.explorer {
         div[for="control"] {
             margin-top: -20px;
         }
+
+        div[for="show-lists"] {
+            div[role="lists"] {
+                .list-child {
+                    margin: 10px 10px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    section.explorer {
+
+        div[for="control"] {
+            margin-top: -20px;
+        }
+
+        div[for="show-lists"] {
+            div[role="lists"] {
+                .list-child {
+                    margin: 10px 15px;
+                }
+            }
+        }       
     }
 }

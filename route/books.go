@@ -19,44 +19,6 @@ import (
 	"github.com/mholt/archiver"
 )
 
-func getExplorerRoot(c echo.Context) error {
-	userID, err := getSessionUserID(c)
-	if err != nil {
-		return err
-	}
-	var user model.User
-	model.DB.Where("id = ?", userID).Find(&user)
-
-	return c.Redirect(http.StatusFound, fmt.Sprintf("/u/explorer/%v", user.ListID))
-}
-
-type getBooksData struct {
-	*TempalteCommon
-	List model.List
-}
-
-func getExplorer(c echo.Context) error {
-	id := c.Param("id")
-
-	tc := newTemplateCommon(c, "Books")
-	data := &getBooksData{}
-	data.TempalteCommon = tc
-	data.Active = "/u/explorer"
-
-	var list model.List
-	model.DB.Where("id = ?", id).Preload("Epubs").Preload("Children").Find(&list)
-	data.List = list
-
-	return c.Render(http.StatusOK, "explorer", data)
-}
-
-func getBooksNew(c echo.Context) error {
-	tc := newTemplateCommon(c, "Books")
-	data := &gtbData{}
-	data.TempalteCommon = tc
-	return c.Render(http.StatusOK, "books/new", data)
-}
-
 const uploadDir = "uploads"
 
 // Request parameters

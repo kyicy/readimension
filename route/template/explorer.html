@@ -7,6 +7,9 @@
 <section class="explorer">
 
     <div for="control">
+        {{if (ne .List.ParentID 0)}}
+        <a class="pure-button" href="/u/explorer/{{.List.ParentID}}" ><i class="material-icons">arrow_back</i></a>
+        {{end}}
         <form class="pure-form new-list">
             <input type="text" name="name"  placeholder="Folder Name" required maxlength="100">
             <input class="pure-button" type="submit" value="New Folder">
@@ -19,6 +22,20 @@
     </div>    
 
     <div for="show-lists">
+        <div role="lists">
+            {{with .List.Children}}
+                {{range .}}
+                    <div class="list-child">
+                        <a href="/u/explorer/{{.ID}}">
+                            <i class="material-icons">
+                                    folder
+                            </i>
+                        </a>
+                        <span>{{.Name}}</span>
+                    </div>
+                {{end}}
+            {{end}}
+        </div>
     </div>
 
     <div for="show-books">

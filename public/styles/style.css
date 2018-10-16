@@ -16,10 +16,46 @@ section.explorer div[for=control] form * {
 section.explorer div[for=control] > button {
   margin: 2px;
 }
+section.explorer div[for=show-lists] div[role=lists] {
+  display: flex;
+}
+section.explorer div[for=show-lists] div[role=lists] .list-child {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 2px #bbb;
+  align-items: center;
+  max-width: 160px;
+}
+section.explorer div[for=show-lists] div[role=lists] .list-child a {
+  text-decoration: none;
+}
+section.explorer div[for=show-lists] div[role=lists] .list-child a i {
+  font-size: 5em;
+  color: #8cd2f0;
+}
+section.explorer div[for=show-lists] div[role=lists] .list-child span {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0px 3px 3px 3px;
+  color: #575757;
+  font-size: 0.8em;
+}
 
 @media only screen and (max-width: 600px) {
   section.explorer div[for=control] {
     margin-top: -20px;
+  }
+  section.explorer div[for=show-lists] div[role=lists] .list-child {
+    margin: 10px 10px;
+  }
+}
+@media only screen and (min-width: 601px) {
+  section.explorer div[for=control] {
+    margin-top: -20px;
+  }
+  section.explorer div[for=show-lists] div[role=lists] .list-child {
+    margin: 10px 15px;
   }
 }
 body {

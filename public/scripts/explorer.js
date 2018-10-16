@@ -13,6 +13,8 @@ function bindNewFolderForm() {
     let form = document.querySelector("div[for='control'] form")
 
     form.addEventListener("submit", function (evt) {
+
+
         evt.preventDefault()
         data = new FormData(this)
         name = data.get("name")
@@ -21,13 +23,15 @@ function bindNewFolderForm() {
         let request = new XMLHttpRequest();
         request.open('POST', newListEndPoint, true);
         request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-        request.send(JSON.stringify({name}));
+        request.send(JSON.stringify({
+            name
+        }));
 
         request.onload = function () {
             if (request.status >= 200 && request.status < 400) {
-                // data = JSON.parse(request.responseText)
+                data = JSON.parse(request.responseText)
+                form.reset();
                 put2Lists(data)
-
             } else {
                 console.error("server error!")
             }
@@ -36,8 +40,16 @@ function bindNewFolderForm() {
     })
 }
 
-function put2Lists() {
+function put2Lists(data) {
+    let {
+        name,
+        id
+    } = data;
+    let divEle = document.createElement("div")
+    divEle.className = "list-child"
+    divEle.innerHTML = `<a href="/u/explorer/${id}"><i class="material-icons">folder</i></a><span>${name}<span>`
 
+    let container = document.querySelector("[for=show-lists] [role=lists]").appendChild(divEle)
 }
 
 function ready(fn) {
