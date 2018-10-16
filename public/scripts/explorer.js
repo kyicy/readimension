@@ -3,7 +3,6 @@ function bindNewBookButtion() {
     let uploaderSection = document.querySelector("div[for=upload-books]")
     newBookButton.addEventListener("click", function () {
         let display = uploaderSection.style.display;
-        console.log(display);
         let nextDisplay = display === "none" ? "block" : "none";
         uploaderSection.style.display = nextDisplay;
     })
@@ -11,7 +10,12 @@ function bindNewBookButtion() {
 
 function bindNewFolderForm() {
     let form = document.querySelector("div[for='control'] form")
-
+    let newListButton = document.querySelector("[for=control] button.new-list")
+    let nameInput = form.querySelector("input")
+    newListButton.addEventListener("click", function () {
+        form.style.display = "block"
+        nameInput.focus()
+    })
     form.addEventListener("submit", function (evt) {
 
 
@@ -32,6 +36,7 @@ function bindNewFolderForm() {
                 data = JSON.parse(request.responseText)
                 form.reset();
                 put2Lists(data)
+                form.style.display = "none"
             } else {
                 console.error("server error!")
             }

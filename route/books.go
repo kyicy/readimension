@@ -235,10 +235,11 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	model.DB.Model(list).Association("Epubs").Append(epubRecord)
 
+	if err := archiver.Zip.Open(storeName, storeFolder); err != nil {
+		c.Logger().Error(err)
+	}
+
 	defer func() {
-		if err := archiver.Zip.Open(storeName, storeFolder); err != nil {
-			c.Logger().Error(err)
-		}
 		if err := os.Remove(storeName); err != nil {
 			c.Logger().Error(err)
 		}
