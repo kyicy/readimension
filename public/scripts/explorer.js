@@ -97,7 +97,7 @@ function bindSelection() {
         // The container is also the boundary in this case
         boundaries: ['[for=show-lists', '[for=show-books]'],
 
-
+        disableTouch: true,
 
         onSelect(evt) {
             let target = evt.target
