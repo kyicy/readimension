@@ -13,7 +13,10 @@ function bindNewFolderForm() {
     let newListButton = document.querySelector("[for=control] button.new-list")
     let nameInput = form.querySelector("input")
     newListButton.addEventListener("click", function () {
-        form.style.display = "block"
+        let display = form.style.display;
+        let nextDisplay = display === "none" ? "block" : "none";
+        form.style.display = nextDisplay;
+
         nameInput.focus()
     })
     form.addEventListener("submit", function (evt) {
