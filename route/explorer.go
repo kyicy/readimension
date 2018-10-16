@@ -32,8 +32,10 @@ func getExplorer(c echo.Context) error {
 	data.TempalteCommon = tc
 	data.Active = "/u/explorer"
 
+	userID, _ := getSessionUserID(c)
+
 	var list model.List
-	model.DB.Where("id = ?", id).Preload("Epubs").Preload("Children").Find(&list)
+	model.DB.Where("id = ? and user = ?", id, userID).Preload("Epubs").Preload("Children").Find(&list)
 	data.List = list
 
 	return c.Render(http.StatusOK, "explorer", data)
