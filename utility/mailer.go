@@ -2,9 +2,12 @@ package utility
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
-	"log"
-	"net/smtp"
+	"net"
+	"strconv"
+
+	"gopkg.in/gomail.v2"
 )
 
 type mailer struct {
@@ -42,11 +45,8 @@ type tplBind struct {
 }
 
 func (m *mailer) SendVerification(username, email, uuid string) {
-	if m.env != "production" {
-		return
-	}
-	t, _ := template.New("tml").Parse(mailTpl)
 
+	t, _ := template.New("tml").Parse(mailTpl)
 	data := tplBind{
 		username, uuid,
 	}
@@ -54,21 +54,19 @@ func (m *mailer) SendVerification(username, email, uuid string) {
 	buf := bytes.NewBuffer([]byte{})
 	t.ExecuteTemplate(buf, "T", &data)
 
-	auth := smtp.PlainAuth("", Postman.sender, Postman.password, Postman.smtp)
+	message := gomail.NewMessage()
+	message.SetHeader("From", Postman.sender)
+	message.SetHeader("To", email)
+	message.SetHeader("Subject", "verify your email")
+	message.SetBody("text/html", buf.String())
 
-	to := []string{email}
-	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\r\n"
+	host, port, _ := net.SplitHostPort(Postman.smtp)
 
-	msg := []byte(
-		"From: " + Postman.sender + "\r\n" +
-			"To: " + email + "\r\n" +
-			"Subject: verify your email\r\n" +
-			mime +
-			buf.String() + "\r\n")
+	_port, _ := strconv.Atoi(port)
 
-	err := smtp.SendMail(Postman.smtp+":25", auth, Postman.sender, to, msg)
+	d := gomail.NewDialer(host, _port, Postman.sender, Postman.password)
 
-	if err != nil {
-		log.Fatal(err)
+	if err := d.DialAndSend(message); err != nil {
+		fmt.Println(err)
 	}
 }
