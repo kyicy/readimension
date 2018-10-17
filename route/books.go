@@ -162,19 +162,20 @@ func postChunksDone(c echo.Context) error {
 
 	f.Close()
 
+	defer func() {
+		// remove upload folder
+		path := filepath.Dir(finalFilename)
+		os.RemoveAll(path)
+		fmt.Println("defer in chunkdown")
+	}()
+
 	return afterUpload(c, finalFilename)
 }
 
 func afterUpload(c echo.Context, fileName string) error {
 	listID := c.Param("list_id")
-	defer func() {
-		// remove upload folder
-		path := filepath.Dir(fileName)
-		os.RemoveAll(path)
-	}()
 
 	info, err := epub.Load(fileName)
-
 	// not a epub file
 	if err != nil {
 		return err
@@ -182,14 +183,11 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	book := info.Book()
 	storeFolder := "books/" + book.Hash
-	storeName := storeFolder + ".epub"
 
 	var epubRecord model.Epub
 	model.DB.Where("sha256 = ?", book.Hash).First(&epubRecord)
 
 	if epubRecord.SHA256 != book.Hash {
-		os.MkdirAll("covers", 0777)
-
 		var coverFormat string
 		if info.HasCover() {
 			bytes, format, err := info.GetCover()
@@ -209,11 +207,6 @@ func afterUpload(c echo.Context, fileName string) error {
 			case "png":
 				png.Encode(file, bytes)
 			}
-		}
-		os.MkdirAll("books", 0777)
-
-		if err := os.Rename(fileName, storeName); err != nil {
-			c.Logger().Error(err)
 		}
 
 		epubRecord = model.Epub{
@@ -246,15 +239,9 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	model.DB.Create(&ule)
 
-	if err := archiver.Zip.Open(storeName, storeFolder); err != nil {
+	if err := archiver.Zip.Open(fileName, storeFolder); err != nil {
 		c.Logger().Error(err)
 	}
-
-	defer func() {
-		if err := os.Remove(storeName); err != nil {
-			c.Logger().Error(err)
-		}
-	}()
 
 	return nil
 }

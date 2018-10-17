@@ -56,6 +56,15 @@ type configStruct map[string]struct {
 }
 
 func main() {
+	// book folder
+	os.MkdirAll("books", 0777)
+
+	// cover folder
+	os.MkdirAll("covers", 0777)
+
+	// upload folder
+	os.MkdirAll("uploads", 0777)
+
 	configFile, env := parseFlag()
 	file, err := os.Open(configFile)
 	checkError(err)
