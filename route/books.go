@@ -166,7 +166,6 @@ func postChunksDone(c echo.Context) error {
 		// remove upload folder
 		path := filepath.Dir(finalFilename)
 		os.RemoveAll(path)
-		fmt.Println("defer in chunkdown")
 	}()
 
 	return afterUpload(c, finalFilename)

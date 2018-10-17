@@ -100,6 +100,10 @@ function bindSelection() {
         disableTouch: true,
 
         onSelect(evt) {
+            let target = evt.target
+            if (target.tagName === "I") {
+                return
+            }
             eleRoot = getEleRoot(evt.target)
             // Check if clicked element is already selected
             const selected = eleRoot.classList.contains('selected');
