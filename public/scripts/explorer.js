@@ -101,7 +101,7 @@ function bindSelection() {
 
         onSelect(evt) {
             let target = evt.target
-            if (target.tagName === "I") {
+            if (target.tagName === "I" || target.tagName === "IMG") {
                 return
             }
             eleRoot = getEleRoot(evt.target)
