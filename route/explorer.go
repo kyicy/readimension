@@ -38,7 +38,11 @@ func getExplorer(c echo.Context) error {
 	model.DB.Where("id = ? and user = ?", id, userID).Preload("Epubs").Preload("Children").Find(&list)
 	data.List = list
 
-	return c.Render(http.StatusOK, "explorer", data)
+	if list.ID != 0 {
+		return c.Render(http.StatusOK, "explorer", data)
+	}
+
+	return c.String(http.StatusNotFound, "not found")
 }
 
 type _deleteExplorerBody struct {
