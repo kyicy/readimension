@@ -95,15 +95,11 @@ function bindSelection() {
         containers: ['[for=show-lists', '[for=show-books]'],
 
         // The container is also the boundary in this case
-        boundaries: ['[for=show-lists', '[for=show-books]'],
+        boundaries: ['main'],
 
         disableTouch: true,
 
         onSelect(evt) {
-            let target = evt.target
-            if (target.tagName === "A") {
-                return location.href = target.href
-            }
             eleRoot = getEleRoot(evt.target)
             // Check if clicked element is already selected
             const selected = eleRoot.classList.contains('selected');
@@ -205,7 +201,6 @@ function bindDeleteButton() {
 
         let lists = [].slice.call(document.querySelectorAll(".list-child.selectable.selected")).map(e => e.dataset.id)
         let books = [].slice.call(document.querySelectorAll(".book.selectable.selected")).map(e => e.dataset.id)
-
 
         let request = new XMLHttpRequest();
         request.open('DELETE', `/u/explorer/${currentList}`, true);
