@@ -10,6 +10,6 @@ bundle:
 	packr
 
 build:
-	go build -o wankel *.go
+	go build -o readimension *.go
 
 compile: bundle build
