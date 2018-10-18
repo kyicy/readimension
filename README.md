@@ -43,7 +43,7 @@ readimension --env=development
 
 `readimension` will generate three folders {`uploads`, `covers`, `books`} and one database file `readimension.db`
 
-In production (json key is `'production'`) environment, readimension doesn't service static files (`covers`, `books`), please set up an nginx server. You can check the ![sample nginx conf file](nginx.sample.conf).
+In production (json key is `'production'`) environment, readimension doesn't service static files (`covers`, `books`), please set up an nginx server. You can check the [sample nginx conf](nginx.sample.conf).
 
 ## Screenshots
 
