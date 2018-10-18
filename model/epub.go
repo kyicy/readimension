@@ -17,3 +17,15 @@ type Epub struct {
 func (e *Epub) CoverPath() string {
 	return "/covers/" + e.SHA256 + "." + e.CoverFormat
 }
+
+func (e *Epub) IsZipped() bool {
+	return e.SizeByMB <= 10.0
+}
+
+func (e *Epub) StoreName() string {
+	if e.IsZipped() {
+		return e.SHA256 + ".epub"
+	} else {
+		return e.SHA256
+	}
+}

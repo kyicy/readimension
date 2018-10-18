@@ -161,13 +161,6 @@ func postChunksDone(c echo.Context) error {
 	}
 
 	f.Close()
-
-	defer func() {
-		// remove upload folder
-		path := filepath.Dir(finalFilename)
-		os.RemoveAll(path)
-	}()
-
 	return afterUpload(c, finalFilename)
 }
 
@@ -219,6 +212,16 @@ func afterUpload(c echo.Context, fileName string) error {
 
 		model.DB.Create(&epubRecord)
 
+		var err error
+		if epubRecord.IsZipped() {
+			err = os.Rename(fileName, fmt.Sprintf("%s.epub", storeFolder))
+		} else {
+			err = archiver.Zip.Open(fileName, storeFolder)
+		}
+
+		if err != nil {
+			c.Logger().Error(err)
+		}
 	}
 
 	var list model.List
@@ -238,7 +241,8 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	model.DB.Create(&ule)
 
-	if err := archiver.Zip.Open(fileName, storeFolder); err != nil {
+	path := filepath.Dir(fileName)
+	if err := os.RemoveAll(path); err != nil {
 		c.Logger().Error(err)
 	}
 

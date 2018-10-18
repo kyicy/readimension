@@ -4,9 +4,9 @@
             {{range .}}
                 <div class="book selectable" data-id={{.ID}}>
                     {{if .HasCover}}
-                        <a href="/u/i/?book={{.SHA256}}" target="_blank"><img src="{{.CoverPath}}" alt=""></a>
+                        <a href="/u/i/?book={{.StoreName}}" target="_blank"><img src="{{.CoverPath}}" alt=""></a>
                     {{else}}
-                        <a href="/u/i/?book={{.SHA256}}" target="_blank"><img src="/images/NoBookCoverImage.jpg" alt=""></a>
+                        <a href="/u/i/?book={{.StoreName}}" target="_blank"><img src="/images/NoBookCoverImage.jpg" alt=""></a>
                     {{end}}
                     <span title="{{.Title}}">{{.Title}}</span>
                     <span title="{{.Author}}">{{.Author}}</span>
