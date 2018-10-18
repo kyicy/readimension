@@ -74,8 +74,6 @@ func Register(e *echo.Echo) {
 
 	e.GET("/sign-in", getSignIn)
 	e.POST("/sign-in", postSignIn)
-	e.GET("/to-be-activated", getToBeActivated)
-	e.GET("/activate/:uuid", getActivate)
 	e.GET("/sign-out", getSignOut)
 
 	e.GET("/", getExplorerRoot, mw.UserAuth)

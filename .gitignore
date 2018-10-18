@@ -23,3 +23,5 @@ config.json
 uploads
 books
 covers
+
+*.db

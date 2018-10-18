@@ -3,11 +3,9 @@ package route
 import (
 	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/kyicy/readimension/model"
-	"github.com/kyicy/readimension/utility"
+	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo"
 )
 
@@ -51,6 +49,13 @@ func postSignUp(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/sign-up")
 	}
 
+	// email not allowed
+	if !config.HasUser(u.Email) {
+		sess.AddFlash("Email not allowed", "sign_up")
+		sess.Save(c.Request(), c.Response())
+		return c.Redirect(http.StatusSeeOther, "/sign-up")
+	}
+
 	// email taken error
 	dbUser := new(model.User)
 	model.DB.Where("email = ?", u.Email).First(&dbUser)
@@ -67,64 +72,16 @@ func postSignUp(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/sign-up")
 	}
 
-	// Start Register Process
-	// Generate a uuid, and store related information to redis, expires in one day
-
-	v4UUID, _ := uuid.NewRandom()
-	utility.RedisClient.HMSet(v4UUID.String(), map[string]interface{}{
-		"username": u.Username,
-		"email":    u.Email,
-		"password": u.Password,
-	})
-	utility.RedisClient.Expire(v4UUID.String(), time.Minute*30)
-
-	utility.Postman.SendVerification(u.Username, u.Email, v4UUID.String())
-
-	return c.Redirect(http.StatusSeeOther, "/to-be-activated")
-}
-
-type _getActivateData struct {
-	IsSuccess bool
-	Message   string
-	*TempalteCommon
-}
-
-func getActivate(c echo.Context) error {
-	data := new(_getActivateData)
-	tc := newTemplateCommon(c, "Activate")
-	data.TempalteCommon = tc
-
-	uuid := c.Param("uuid")
-	redisData := utility.RedisClient.HGetAll(uuid)
-	val := redisData.Val()
-	username := val["username"]
-	email := val["email"]
-	password := val["password"]
-
-	// uuid expired or wrong uuid
-	if len(username) == 0 {
-		data.Message = "Link expired, please sign up again"
-		return c.Render(http.StatusOK, "user/activate", data)
-	}
-
-	// email taken error
-	dbUser := new(model.User)
-	model.DB.Where("email = ?", email).First(&dbUser)
-	if dbUser.Email == email {
-		data.Message = "Email already activated"
-		return c.Render(http.StatusOK, "user/activate", data)
-	}
-
 	registerUser := model.User{
-		Name:     username,
-		Email:    email,
-		Password: password,
+		Name:     u.Username,
+		Email:    u.Email,
+		Password: u.Password,
 	}
 
 	model.DB.Create(&registerUser)
 
 	list := model.List{
-		Name: fmt.Sprintf("/home/%s", username),
+		Name: fmt.Sprintf("/home/%s", u.Username),
 		User: registerUser.ID,
 	}
 
@@ -132,12 +89,9 @@ func getActivate(c echo.Context) error {
 	model.DB.Model(&registerUser).Association("List").Replace(list)
 
 	tc.login(&registerUser)
-	data.Message = fmt.Sprintf("Welcome! %s(%s). May the force be with you", username, email)
-	data.IsSuccess = true
 
-	utility.RedisClient.Del(uuid)
+	return c.Redirect(http.StatusSeeOther, "/")
 
-	return c.Render(http.StatusOK, "user/activate", data)
 }
 
 func getSignIn(c echo.Context) error {
