@@ -68,7 +68,7 @@ Bibi.Preset = {
 
     "extensions": [{
             "name": "Unzipper",
-            "src": "extensions/unzipper/unzipper.js"
+            "src": "/u/i/extensions/unzipper/unzipper.js"
         },
         // {
         // "name": "Analytics",
