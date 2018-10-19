@@ -4,6 +4,7 @@
     <hr>
     <footer>Readimension&nbsp;&copy; 2018~<script>document.write((new Date()).getFullYear())</script>&nbsp;<a href="https://github.com/kyicy/readimension/issues" target="_blank">@kyicy</a></footer>
 
+{{if .HasGA}}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{.GoogleAnalytics}}"></script>
 <script>
@@ -13,6 +14,7 @@
 
   gtag('config', '{{.GoogleAnalytics}}');
 </script>
+{{end}}
 
 </html>
 {{end}}

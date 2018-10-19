@@ -15,7 +15,7 @@ type Epub struct {
 }
 
 func (e *Epub) CoverPath() string {
-	return "/covers/" + e.SHA256 + "." + e.CoverFormat
+	return "/u/covers/" + e.SHA256 + "." + e.CoverFormat
 }
 
 func (e *Epub) IsZipped() bool {

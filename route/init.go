@@ -2,17 +2,14 @@ package route
 
 import (
 	"encoding/gob"
-	"fmt"
 	"mime"
 	"net/http"
 	"path/filepath"
 	"strings"
 
 	"github.com/gobuffalo/packr"
-	"github.com/gorilla/sessions"
 	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/model"
-	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
 	"gopkg.in/go-playground/validator.v9"
@@ -25,47 +22,6 @@ var validate *validator.Validate
 func init() {
 	gob.Register(&userData{})
 	validate = validator.New()
-}
-
-type TempalteCommon struct {
-	echo.Context
-	Title           string
-	Active          string
-	Flashes         []string
-	GoogleAnalytics string
-}
-
-func (tc *TempalteCommon) GetSession() (*sessions.Session, error) {
-	return session.Get("session", tc.Context)
-}
-
-func (tc *TempalteCommon) logout() {
-	sess, _ := tc.GetSession()
-	sess.Values["userExist?"] = false
-	delete(sess.Values, "userData")
-	sess.Save(tc.Request(), tc.Response())
-}
-
-func (tc *TempalteCommon) login(u *model.User) {
-	sess, _ := tc.GetSession()
-	sess.Values["userExist?"] = true
-	sess.Values["userData"] = userData{
-		"id":    fmt.Sprintf("%d", u.ID),
-		"name":  u.Name,
-		"email": u.Email,
-	}
-	sess.Save(tc.Request(), tc.Response())
-}
-
-func newTemplateCommon(c echo.Context, title string) *TempalteCommon {
-	title = title + " - Readimension"
-	configuration := config.Get()
-	return &TempalteCommon{
-		Context:         c,
-		Title:           title,
-		Active:          c.Request().URL.Path,
-		GoogleAnalytics: configuration.GoogleAnalytics,
-	}
 }
 
 // Register registers all handler to a url path

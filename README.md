@@ -23,27 +23,29 @@ Create a configuration file, `config.json`
         "addr": "0.0.0.0",
         "port": "10086",
         "session_secret": "",
-        "emails": ["example@example.com"]
+        "emails": ["example@example.com"],
+        "google_analytics": ""
     },
     "development": {
         "addr": "0.0.0.0",
         "port": "10086",
         "session_secret": "",
-        "emails": ["example@example.com"]
+        "emails": ["example@example.com"],
+        "google_analytics": ""
     }
 }
 ```
 Then start the server
 ``` sh
-readimension --env=development
+readimension --env development --path .
 ```
 
 `addr` and `port` defines which `ip` and `port` the web service shall listen to.
 `emails` contains an array of emails are allowed to register users.
 
-`readimension` will generate three folders {`uploads`, `covers`, `books`} and one database file `readimension.db`
+`readimension` will generate three folders {`uploads`, `covers`, `books`} and one database file `readimension.db`.
 
-In production (json key is `'production'`) environment, readimension doesn't service static files (`covers`, `books`), please set up an nginx server. You can check the [sample nginx conf](nginx.sample.conf).
+Then, just enjoy reading.
 
 ## Screenshots
 
