@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -17,26 +18,29 @@ import (
 )
 
 func parseFlag() (string, string) {
-	var configFile string
-	flag.StringVar(&configFile, "conf", "config.json", "json config file")
 	var environment string
 	flag.StringVar(&environment, "env", "production", "running environment")
+
+	var path string
+	flag.StringVar(&path, "path", ".", "working path")
+
 	flag.Parse()
-	return configFile, environment
+	return environment, path
 }
 
 func main() {
+	env, workingPath := parseFlag()
+
 	// book folder
-	os.MkdirAll("books", 0777)
+	os.MkdirAll(path.Join(workingPath, "books"), 0777)
 
 	// cover folder
-	os.MkdirAll("covers", 0777)
+	os.MkdirAll(path.Join(workingPath, "covers"), 0777)
 
 	// upload folder
-	os.MkdirAll("uploads", 0777)
+	os.MkdirAll(path.Join(workingPath, "uploads"), 0777)
 
-	configFile, env := parseFlag()
-	file, err := os.Open(configFile)
+	file, err := os.Open(path.Join(workingPath, "config.json"))
 	checkError(err)
 
 	bytes, err := ioutil.ReadAll(file)
@@ -47,13 +51,14 @@ func main() {
 	config.SetENV(env)
 
 	// Redis Session Store
-	sessionStore, err := sqlitestore.NewSqliteStore("readimension.db", "sessions", "/", 3600*24*365, []byte(envConfig.SessionSecret))
+	dbPath := path.Join(workingPath, "readimension.db")
+	sessionStore, err := sqlitestore.NewSqliteStore(dbPath, "sessions", "/", 3600*24*365, []byte(envConfig.SessionSecret))
 	checkError(err)
 	defer sessionStore.Close()
 
 	// Mysql and Model
 
-	db, err := gorm.Open("sqlite3", "readimension.db")
+	db, err := gorm.Open("sqlite3", dbPath)
 	defer db.Close()
 	if env != "production" {
 		db.LogMode(true)
@@ -67,6 +72,7 @@ func main() {
 
 	// Start the Server
 	addr := fmt.Sprintf("%s:%s", envConfig.Addr, envConfig.Port)
+
 	e.Logger.Fatal(e.Start(addr))
 }
 

@@ -161,7 +161,10 @@ func postChunksDone(c echo.Context) error {
 	}
 
 	f.Close()
-	return afterUpload(c, finalFilename)
+	afterUpload(c, finalFilename)
+
+	writeHTTPResponse(w, http.StatusOK, nil)
+	return nil
 }
 
 func afterUpload(c echo.Context, fileName string) error {

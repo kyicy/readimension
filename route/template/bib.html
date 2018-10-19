@@ -1,10 +1,6 @@
+{{define "bibi"}}
 <!DOCTYPE html>
-
-
-
 <html id="bibi">
-
-
 <head>
 
 	<meta charset="utf-8" />
@@ -44,8 +40,9 @@
 </body>
 
 
+{{if .HasGA}}
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-127108613-1"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{.GoogleAnalytics}}"></script>
 <script>
 	window.dataLayer = window.dataLayer || [];
 
@@ -54,7 +51,8 @@
 	}
 	gtag('js', new Date());
 
-	gtag('config', 'UA-127108613-1');
+	gtag('config', '{{.GoogleAnalytics}}');
 </script>
-
+{{end}}
 </html>
+{{end}}
