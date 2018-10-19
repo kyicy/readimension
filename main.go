@@ -71,7 +71,7 @@ func main() {
 	if env == "production" {
 		if envConfig.Addr != "localhost" && envConfig.Addr != "" && envConfig.Addr != "127.0.0.1" {
 			e.AutoTLSManager.HostPolicy = autocert.HostWhitelist(envConfig.Addr)
-			e.AutoTLSManager.Cache = autocert.DirCache("/var/www/.cache")
+			e.AutoTLSManager.Cache = autocert.DirCache(".cache")
 			e.Logger.Fatal(e.StartAutoTLS(addr))
 		}
 	} else {
