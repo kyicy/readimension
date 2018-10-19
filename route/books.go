@@ -17,6 +17,7 @@ import (
 	"github.com/kyicy/readimension/utility/epub"
 	"github.com/labstack/echo"
 	"github.com/mholt/archiver"
+	"github.com/nfnt/resize"
 )
 
 const uploadDir = "uploads"
@@ -194,13 +195,17 @@ func afterUpload(c echo.Context, fileName string) error {
 				return err
 			}
 
+			// resize to width 1000 using Lanczos resampling
+			// and preserve aspect ratio
+			m := resize.Resize(300, 0, bytes, resize.Lanczos3)
+
 			switch format {
 			case "gif":
-				gif.Encode(file, bytes, nil)
+				gif.Encode(file, m, nil)
 			case "jpeg":
-				jpeg.Encode(file, bytes, nil)
+				jpeg.Encode(file, m, nil)
 			case "png":
-				png.Encode(file, bytes)
+				png.Encode(file, m)
 			}
 		}
 

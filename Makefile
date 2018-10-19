@@ -12,4 +12,7 @@ bundle:
 build:
 	go build -o readimension *.go
 
+clean:
+	rm -rf books covers uploads readimension.db
+	
 compile: bundle build
