@@ -14,15 +14,14 @@ import (
 	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/michaeljs1990/sqlitestore"
+	"golang.org/x/crypto/acme/autocert"
 )
 
-func parseFlag() (string, string) {
-	var configFile string
-	flag.StringVar(&configFile, "conf", "config.json", "json config file")
+func parseFlag() string {
 	var environment string
 	flag.StringVar(&environment, "env", "production", "running environment")
 	flag.Parse()
-	return configFile, environment
+	return environment
 }
 
 func main() {
@@ -35,8 +34,9 @@ func main() {
 	// upload folder
 	os.MkdirAll("uploads", 0777)
 
-	configFile, env := parseFlag()
-	file, err := os.Open(configFile)
+	env := parseFlag()
+
+	file, err := os.Open("config.json")
 	checkError(err)
 
 	bytes, err := ioutil.ReadAll(file)
@@ -67,7 +67,17 @@ func main() {
 
 	// Start the Server
 	addr := fmt.Sprintf("%s:%s", envConfig.Addr, envConfig.Port)
-	e.Logger.Fatal(e.Start(addr))
+
+	if env == "production" {
+		if envConfig.Addr != "localhost" && envConfig.Addr != "" && envConfig.Addr != "127.0.0.1" {
+			e.AutoTLSManager.HostPolicy = autocert.HostWhitelist(envConfig.Addr)
+			e.AutoTLSManager.Cache = autocert.DirCache("/var/www/.cache")
+			e.Logger.Fatal(e.StartAutoTLS(addr))
+		}
+	} else {
+		e.Logger.Fatal(e.Start(addr))
+	}
+
 }
 
 func checkError(err error) {

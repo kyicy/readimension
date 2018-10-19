@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/sessions"
 	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/model"
+	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
 	"gopkg.in/go-playground/validator.v9"
@@ -28,9 +29,10 @@ func init() {
 
 type TempalteCommon struct {
 	echo.Context
-	Title   string
-	Active  string
-	Flashes []string
+	Title           string
+	Active          string
+	Flashes         []string
+	GoogleAnalytics string
 }
 
 func (tc *TempalteCommon) GetSession() (*sessions.Session, error) {
@@ -57,10 +59,12 @@ func (tc *TempalteCommon) login(u *model.User) {
 
 func newTemplateCommon(c echo.Context, title string) *TempalteCommon {
 	title = title + " - Readimension"
+	configuration := config.Get()
 	return &TempalteCommon{
-		Context: c,
-		Title:   title,
-		Active:  c.Request().URL.Path,
+		Context:         c,
+		Title:           title,
+		Active:          c.Request().URL.Path,
+		GoogleAnalytics: configuration.GoogleAnalytics,
 	}
 }
 
@@ -79,6 +83,9 @@ func Register(e *echo.Echo) {
 	e.GET("/", getExplorerRoot, mw.UserAuth)
 
 	userGroup := e.Group("/u", mw.UserAuth)
+
+	userGroup.Static("/covers", "covers")
+	userGroup.Static("/books", "books")
 
 	userGroup.GET("/explorer", getExplorerRoot)
 	userGroup.DELETE("/explorer/:list_id", deleteExplorer)
@@ -103,15 +110,13 @@ func Register(e *echo.Echo) {
 		return nil
 	})
 	e.GET("/u/i", func(c echo.Context) error {
-		c.Response().Header().Set("Cache-Control", "max-age=3600")
-		r := box.String("i/index.html")
-		return c.HTML(http.StatusOK, r)
+		tc := newTemplateCommon(c, "")
+		return c.Render(http.StatusOK, "bibi", tc)
 	})
 
 	e.GET("/u/i/", func(c echo.Context) error {
-		c.Response().Header().Set("Cache-Control", "max-age=3600")
-		r := box.String("i/index.html")
-		return c.HTML(http.StatusOK, r)
+		tc := newTemplateCommon(c, "")
+		return c.Render(http.StatusOK, "bibi", tc)
 	})
 }
 

@@ -1,11 +1,14 @@
 package config
 
-type ConfigStruct map[string]struct {
-	Addr          string   `json:"addr"`
-	Port          string   `json:"port"`
-	SessionSecret string   `json:"session_secret"`
-	Emails        []string `json:"emails"`
+type envRecord struct {
+	Addr            string   `json:"addr"`
+	Port            string   `json:"port"`
+	SessionSecret   string   `json:"session_secret"`
+	Emails          []string `json:"emails"`
+	GoogleAnalytics string   `json:"google_analytics"`
 }
+
+type ConfigStruct map[string]envRecord
 
 var Configuratiosn ConfigStruct
 
@@ -25,4 +28,8 @@ func HasUser(email string) bool {
 	}
 
 	return false
+}
+
+func Get() envRecord {
+	return Configuratiosn[ENV]
 }

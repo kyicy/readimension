@@ -5,13 +5,13 @@
     <footer>Readimension&nbsp;&copy; 2018~<script>document.write((new Date()).getFullYear())</script>&nbsp;<a href="https://github.com/kyicy/readimension/issues" target="_blank">@kyicy</a></footer>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-127108613-1"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id={{.GoogleAnalytics}}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'UA-127108613-1');
+  gtag('config', '{{.GoogleAnalytics}}');
 </script>
 
 </html>

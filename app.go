@@ -16,6 +16,7 @@ import (
 func createInstance(env string) *echo.Echo {
 	e := echo.New()
 	e.Use(middleware.CORS())
+	e.Use(middleware.Recover())
 	e.Use(middleware.Logger())
 	e.Use(middleware.SecureWithConfig(middleware.SecureConfig{
 		XSSProtection:      "1; mode=block",
@@ -30,8 +31,6 @@ func createInstance(env string) *echo.Echo {
 		e.Use(mw.Minify)
 	} else {
 		e.Static("/", "public")
-		e.Static("/covers", "covers")
-		e.Static("/books", "books")
 	}
 
 	route.Register(e)
