@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/gobuffalo/packr"
-	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/route"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -28,7 +27,6 @@ func createInstance(env string) *echo.Echo {
 	isProduction := env == "production"
 	if isProduction {
 		bundle(e)
-		e.Use(mw.Minify)
 	} else {
 		e.Static("/", "public")
 	}
