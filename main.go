@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"path"
+	"time"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -73,7 +75,12 @@ func main() {
 	// Start the Server
 	addr := fmt.Sprintf("%s:%s", envConfig.Addr, envConfig.Port)
 
-	e.Logger.Fatal(e.Start(addr))
+	s := &http.Server{
+		Addr:         addr,
+		ReadTimeout:  20 * time.Minute,
+		WriteTimeout: 20 * time.Minute,
+	}
+	e.Logger.Fatal(e.StartServer(s))
 }
 
 func checkError(err error) {
