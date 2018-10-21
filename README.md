@@ -22,6 +22,7 @@ Create a configuration file, `config.json`
     "production": {
         "addr": "0.0.0.0",
         "port": "10086",
+        "serve_static": false,
         "session_secret": "",
         "emails": ["example@example.com"],
         "google_analytics": ""
@@ -29,6 +30,7 @@ Create a configuration file, `config.json`
     "development": {
         "addr": "0.0.0.0",
         "port": "10086",
+        "serve_static": true,
         "session_secret": "",
         "emails": ["example@example.com"],
         "google_analytics": ""
@@ -44,6 +46,8 @@ readimension --env development --path .
 `emails` contains an array of emails are allowed to register users.
 
 `readimension` will generate three folders {`uploads`, `covers`, `books`} and one database file `readimension.db`.
+
+In production environment, it's preferred to set `serve_static` to false and set up a `nginx` instance to serve static files (`covers` and `books`).
 
 Then, just enjoy reading.
 

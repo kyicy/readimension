@@ -52,14 +52,13 @@ func main() {
 	envConfig := config.Configuratiosn[env]
 	config.SetENV(env)
 
-	// Redis Session Store
+	// Session Store
 	dbPath := path.Join(workingPath, "readimension.db")
 	sessionStore, err := sqlitestore.NewSqliteStore(dbPath, "sessions", "/", 3600*24*365, []byte(envConfig.SessionSecret))
 	checkError(err)
 	defer sessionStore.Close()
 
-	// Mysql and Model
-
+	// Database Model
 	db, err := gorm.Open("sqlite3", dbPath)
 	defer db.Close()
 	if env != "production" {
@@ -74,7 +73,6 @@ func main() {
 
 	// Start the Server
 	addr := fmt.Sprintf("%s:%s", envConfig.Addr, envConfig.Port)
-
 	s := &http.Server{
 		Addr:         addr,
 		ReadTimeout:  20 * time.Minute,

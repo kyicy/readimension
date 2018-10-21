@@ -10,6 +10,7 @@ import (
 	"github.com/gobuffalo/packr"
 	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/model"
+	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
 	"gopkg.in/go-playground/validator.v9"
@@ -38,19 +39,19 @@ func Register(e *echo.Echo) {
 
 	e.GET("/", getExplorerRoot, mw.UserAuth)
 
+	conf := config.Get()
+	if conf.ServeStatic {
+		e.Static("/covers", "covers")
+		e.Static("/books", "books")
+	}
+
 	userGroup := e.Group("/u", mw.UserAuth)
-
-	userGroup.Static("/covers", "covers")
-	userGroup.Static("/books", "books")
-
 	userGroup.GET("/explorer", getExplorerRoot)
 	userGroup.DELETE("/explorer/:list_id", deleteExplorer)
 	userGroup.GET("/explorer/:list_id", getExplorer)
 	userGroup.GET("/explorer", getExplorerRoot)
-
 	userGroup.POST("/:list_id/books/new", postBooksNew)
 	userGroup.POST("/:list_id/books/new/chunksdone", postChunksDone)
-
 	userGroup.POST("/lists/:id/child/new", postListChildNew)
 
 	box := packr.NewBox("../bib")
@@ -58,19 +59,19 @@ func Register(e *echo.Echo) {
 		extName := filepath.Ext(path)
 		mt := mime.TypeByExtension(extName)
 
-		e.GET("/u/"+path, func(c echo.Context) error {
+		userGroup.GET("/"+path, func(c echo.Context) error {
 			c.Response().Header().Set("Cache-Control", "max-age=3600")
 			r := strings.NewReader(box.String(path))
 			return c.Stream(http.StatusOK, mt, r)
 		})
 		return nil
 	})
-	e.GET("/u/i", func(c echo.Context) error {
+	userGroup.GET("/i", func(c echo.Context) error {
 		tc := newTemplateCommon(c, "")
 		return c.Render(http.StatusOK, "bibi", tc)
 	})
 
-	e.GET("/u/i/", func(c echo.Context) error {
+	userGroup.GET("/i/", func(c echo.Context) error {
 		tc := newTemplateCommon(c, "")
 		return c.Render(http.StatusOK, "bibi", tc)
 	})

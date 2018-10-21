@@ -6,6 +6,7 @@ type envRecord struct {
 	SessionSecret   string   `json:"session_secret"`
 	Emails          []string `json:"emails"`
 	GoogleAnalytics string   `json:"google_analytics"`
+	ServeStatic     bool     `json:"serve_static"`
 }
 
 type ConfigStruct map[string]envRecord
