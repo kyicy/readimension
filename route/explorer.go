@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/jinzhu/gorm"
 	"github.com/kyicy/readimension/model"
 	"github.com/labstack/echo"
 )
@@ -35,7 +36,9 @@ func getExplorer(c echo.Context) error {
 	userID, _ := getSessionUserID(c)
 
 	var list model.List
-	model.DB.Where("id = ? and user = ?", id, userID).Preload("Epubs").Preload("Children").Find(&list)
+	model.DB.Where("id = ? and user = ?", id, userID).Preload("Epubs", func(db *gorm.DB) *gorm.DB {
+		return db.Order("epubs.title asc")
+	}).Preload("Children").Find(&list)
 	data.List = list
 
 	if list.ID != 0 {
