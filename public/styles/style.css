@@ -29,6 +29,8 @@ section.explorer div[for=control] > button {
 }
 section.explorer div[for=show-lists] div[role=lists] {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 section.explorer div[for=show-lists] div[role=lists] .list-child {
   display: flex;

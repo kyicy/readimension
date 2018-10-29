@@ -38,6 +38,8 @@ section.explorer {
     div[for="show-lists"] {
         div[role="lists"] {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
             .list-child {
                 display: flex;
                 flex-direction: column;
