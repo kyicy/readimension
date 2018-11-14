@@ -1,4 +1,4 @@
-# [readimension](https://www.readimension.com)
+# readimension
 readimension is a `epub` web service provides both ***file management*** and ***browser reader***.
 
 ## Features
