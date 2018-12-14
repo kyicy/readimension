@@ -224,7 +224,7 @@ func afterUpload(c echo.Context, fileName string) error {
 		if epubRecord.IsZipped() {
 			err = os.Rename(fileName, fmt.Sprintf("%s.epub", storeFolder))
 		} else {
-			err = archiver.Zip.Open(fileName, storeFolder)
+			err = archiver.DefaultZip.Unarchive(fileName, storeFolder)
 		}
 
 		if err != nil {
