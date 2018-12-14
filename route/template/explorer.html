@@ -6,12 +6,13 @@
 {{template "aside" .}}
 <section class="explorer">
 
+    {{if .HasUser}}
     <div for="control">
         {{if (ne .List.ParentID 0)}}
-        <a class="pure-button" href="/u/explorer/{{.List.ParentID}}" ><i class="material-icons">arrow_back</i></a>
+        <a class="pure-button" href="/u/explorer/{{.List.ParentID}}"><i class="material-icons">arrow_back</i></a>
         {{end}}
         <form class="pure-form new-list" style="display: none;">
-            <input type="text" name="name"  placeholder="Press Enter to Submit" required maxlength="100">
+            <input type="text" name="name" placeholder="Press Enter to Submit" required maxlength="100">
             <input class="pure-button" type="submit" hidden>
         </form>
         <button class="new-list pure-button">New Folder</button>
@@ -21,21 +22,22 @@
 
     <div for="upload-books" style="display: none;">
         {{template "books/new" .}}
-    </div>    
+    </div>
+    {{end}}
 
     <div for="show-lists">
         <div role="lists">
             {{with .List.Children}}
-                {{range .}}
-                    <div class="list-child selectable" data-id={{.ID}}>
-                        <a href="/u/explorer/{{.ID}}">
-                            <i class="material-icons">
-                                    folder
-                            </i>
-                        </a>
-                        <span>{{.Name}}</span>
-                    </div>
-                {{end}}
+            {{range .}}
+            <div class="list-child selectable" data-id={{.ID}}>
+                <a href="/u/explorer/{{.ID}}">
+                    <i class="material-icons">
+                        folder
+                    </i>
+                </a>
+                <span>{{.Name}}</span>
+            </div>
+            {{end}}
             {{end}}
         </div>
     </div>
@@ -48,7 +50,7 @@
 </section>
 
 <script>
-    var newListEndPoint ="/u/lists/{{.List.ID}}/child/new"
+    var newListEndPoint = "/u/lists/{{.List.ID}}/child/new"
     var currentList = "{{.List.ID}}"
 </script>
 

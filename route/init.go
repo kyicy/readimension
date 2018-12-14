@@ -2,6 +2,7 @@ package route
 
 import (
 	"encoding/gob"
+	"errors"
 	"mime"
 	"net/http"
 	"path/filepath"
@@ -30,14 +31,16 @@ func Register(e *echo.Echo) {
 	render := getRender()
 	e.Renderer = render
 
+	e.GET("/", getExplorerRoot)
+	e.GET("/u/explorer", getExplorerRoot)
+	e.GET("/u/explorer/:list_id", getExplorer)
+
 	e.GET("/sign-up", getSignUp)
 	e.POST("/sign-up", postSignUp)
 
 	e.GET("/sign-in", getSignIn)
 	e.POST("/sign-in", postSignIn)
 	e.GET("/sign-out", getSignOut)
-
-	e.GET("/", getExplorerRoot, mw.UserAuth)
 
 	conf := config.Get()
 	if conf.ServeStatic {
@@ -46,10 +49,7 @@ func Register(e *echo.Echo) {
 	}
 
 	userGroup := e.Group("/u", mw.UserAuth)
-	userGroup.GET("/explorer", getExplorerRoot)
 	userGroup.DELETE("/explorer/:list_id", deleteExplorer)
-	userGroup.GET("/explorer/:list_id", getExplorer)
-	userGroup.GET("/explorer", getExplorerRoot)
 	userGroup.POST("/:list_id/books/new", postBooksNew)
 	userGroup.POST("/:list_id/books/new/chunksdone", postChunksDone)
 	userGroup.POST("/lists/:id/child/new", postListChildNew)
@@ -92,8 +92,11 @@ func getSessionUserID(c echo.Context) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	ud := sess.Values["userData"]
-	userDataPointer := ud.(*userData)
-	userID := (*userDataPointer)["id"]
-	return userID, nil
+	if ud, flag := sess.Values["userData"]; flag {
+		userDataPointer := ud.(*userData)
+		userID := (*userDataPointer)["id"]
+		return userID, nil
+	}
+	return "", errors.New("session not found")
+
 }

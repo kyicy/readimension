@@ -10,19 +10,13 @@ import (
 )
 
 func getExplorerRoot(c echo.Context) error {
-	userID, err := getSessionUserID(c)
-	if err != nil {
-		return err
-	}
-	var user model.User
-	model.DB.Where("id = ?", userID).Find(&user)
-
-	return c.Redirect(http.StatusFound, fmt.Sprintf("/u/explorer/%v", user.ListID))
+	return c.Redirect(http.StatusFound, fmt.Sprintf("/u/explorer/%v", 1))
 }
 
 type getBooksData struct {
 	*TempalteCommon
-	List model.List
+	List    model.List
+	HasUser bool
 }
 
 func getExplorer(c echo.Context) error {
@@ -34,9 +28,14 @@ func getExplorer(c echo.Context) error {
 	data.Active = "/u/explorer"
 
 	userID, _ := getSessionUserID(c)
+	data.HasUser = (userID != "")
+
+	fmt.Println("!!!")
+	fmt.Println(userID)
+	fmt.Println(data.HasUser)
 
 	var list model.List
-	model.DB.Where("id = ? and user = ?", id, userID).Preload("Epubs", func(db *gorm.DB) *gorm.DB {
+	model.DB.Where("id = ?", id).Preload("Epubs", func(db *gorm.DB) *gorm.DB {
 		return db.Order("epubs.title asc")
 	}).Preload("Children").Find(&list)
 	data.List = list
