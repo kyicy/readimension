@@ -41,7 +41,8 @@ func getRender() *Template {
 			tt = tmpl.New(name)
 		}
 
-		tt.Parse(box.String(path))
+		s, _ := box.FindString(path)
+		tt.Parse(s)
 		return nil
 	})
 

@@ -46,7 +46,8 @@ func bundle(e *echo.Echo) {
 
 		e.GET("/"+path, func(c echo.Context) error {
 			c.Response().Header().Set("Cache-Control", "max-age=3600")
-			r := strings.NewReader(box.String(path))
+			s, _ := box.FindString(path)
+			r := strings.NewReader(s)
 			return c.Stream(http.StatusOK, mt, r)
 		})
 		return nil
