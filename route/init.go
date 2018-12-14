@@ -14,7 +14,7 @@ import (
 	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
-	"gopkg.in/go-playground/validator.v9"
+	validator "gopkg.in/go-playground/validator.v9"
 )
 
 type userData map[string]string
@@ -59,19 +59,19 @@ func Register(e *echo.Echo) {
 		extName := filepath.Ext(path)
 		mt := mime.TypeByExtension(extName)
 
-		userGroup.GET("/"+path, func(c echo.Context) error {
+		e.GET("/u/"+path, func(c echo.Context) error {
 			c.Response().Header().Set("Cache-Control", "max-age=3600")
 			r := strings.NewReader(box.String(path))
 			return c.Stream(http.StatusOK, mt, r)
 		})
 		return nil
 	})
-	userGroup.GET("/i", func(c echo.Context) error {
+	e.GET("/u/i", func(c echo.Context) error {
 		tc := newTemplateCommon(c, "")
 		return c.Render(http.StatusOK, "bibi", tc)
 	})
 
-	userGroup.GET("/i/", func(c echo.Context) error {
+	e.GET("/u/i/", func(c echo.Context) error {
 		tc := newTemplateCommon(c, "")
 		return c.Render(http.StatusOK, "bibi", tc)
 	})
