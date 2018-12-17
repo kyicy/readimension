@@ -6,11 +6,11 @@
 {{template "aside" .}}
 <section class="explorer">
 
-    {{if .HasUser}}
     <div for="control">
         {{if (ne .List.ParentID 0)}}
         <a class="pure-button" href="/u/explorer/{{.List.ParentID}}"><i class="material-icons">arrow_back</i></a>
         {{end}}
+        {{if .HasUser}}
         <form class="pure-form new-list" style="display: none;">
             <input type="text" name="name" placeholder="Press Enter to Submit" required maxlength="100">
             <input class="pure-button" type="submit" hidden>
@@ -18,8 +18,10 @@
         <button class="new-list pure-button">New Folder</button>
         <button class="new-book pure-button">New Book</button>
         <button class="remove pure-button" style="display: none;">remove</button>
+        {{end}}
     </div>
 
+    {{if .HasUser}}
     <div for="upload-books" style="display: none;">
         {{template "books/new" .}}
     </div>
