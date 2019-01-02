@@ -14,6 +14,15 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Princess+Sofia" rel="stylesheet">
 
+    {{if .HasGoogleAdsense}}
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "{{.GoogleAdsense}}",
+        enable_page_level_ads: true
+      });
+    </script>
+    {{end}}
 </head>
 
 <body>

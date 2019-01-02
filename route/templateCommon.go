@@ -16,6 +16,7 @@ type TempalteCommon struct {
 	Active          string
 	Flashes         []string
 	GoogleAnalytics string
+	GoogleAdsense   string
 }
 
 func (tc *TempalteCommon) GetSession() (*sessions.Session, error) {
@@ -41,8 +42,12 @@ func (tc *TempalteCommon) login(u *model.User) {
 }
 
 // HasGA aka check if user has configured google analytics
-func (tc *TempalteCommon) HasGA() bool {
+func (tc *TempalteCommon) HasGoogleAnlytics() bool {
 	return len(tc.GoogleAnalytics) > 0
+}
+
+func (tc *TempalteCommon) HasGoogleAdsense() bool {
+	return len(tc.GoogleAdsense) > 0
 }
 
 func newTemplateCommon(c echo.Context, title string) *TempalteCommon {
@@ -53,5 +58,6 @@ func newTemplateCommon(c echo.Context, title string) *TempalteCommon {
 		Title:           title,
 		Active:          c.Request().URL.Path,
 		GoogleAnalytics: configuration.GoogleAnalytics,
+		GoogleAdsense:   configuration.GoogleAdsense,
 	}
 }
