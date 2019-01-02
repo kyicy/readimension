@@ -30,10 +30,6 @@ func getExplorer(c echo.Context) error {
 	userID, _ := getSessionUserID(c)
 	data.HasUser = (userID != "")
 
-	fmt.Println("!!!")
-	fmt.Println(userID)
-	fmt.Println(data.HasUser)
-
 	var list model.List
 	model.DB.Where("id = ?", id).Preload("Epubs", func(db *gorm.DB) *gorm.DB {
 		return db.Order("epubs.title asc")
