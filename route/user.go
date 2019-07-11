@@ -6,7 +6,7 @@ import (
 
 	"github.com/kyicy/readimension/model"
 	"github.com/kyicy/readimension/utility/config"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func getSignUp(c echo.Context) error {

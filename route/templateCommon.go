@@ -6,8 +6,8 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/kyicy/readimension/model"
 	"github.com/kyicy/readimension/utility/config"
-	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
+	"github.com/labstack/echo/v4"
 )
 
 type TempalteCommon struct {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/kyicy/readimension/model"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func getExplorerRoot(c echo.Context) error {

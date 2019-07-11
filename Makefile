@@ -7,7 +7,7 @@ sass:
 	sass --no-source-map public/styles/style.scss public/styles/style.css
 
 bundle:
-	packr
+	packr2
 
 build:
 	go build -o readimension *.go

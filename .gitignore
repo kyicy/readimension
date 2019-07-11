@@ -25,3 +25,5 @@ books
 covers
 
 *.db
+
+*-packr.go

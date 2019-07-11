@@ -8,12 +8,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/model"
 	"github.com/kyicy/readimension/utility/config"
-	"github.com/labstack/echo"
 	"github.com/labstack/echo-contrib/session"
+	"github.com/labstack/echo/v4"
 	validator "gopkg.in/go-playground/validator.v9"
 )
 
@@ -54,7 +54,7 @@ func Register(e *echo.Echo) {
 	userGroup.POST("/:list_id/books/new/chunksdone", postChunksDone)
 	userGroup.POST("/lists/:id/child/new", postListChildNew)
 
-	box := packr.NewBox("../bib")
+	box := packr.New("bib_box", "../bib")
 	box.Walk(func(path string, f packr.File) error {
 		extName := filepath.Ext(path)
 		mt := mime.TypeByExtension(extName)

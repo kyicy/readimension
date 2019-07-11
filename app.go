@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/kyicy/readimension/route"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func createInstance(env string) *echo.Echo {
@@ -37,7 +37,7 @@ func createInstance(env string) *echo.Echo {
 }
 
 func bundle(e *echo.Echo) {
-	box := packr.NewBox("./public")
+	box := packr.New("public_box", "./public")
 
 	box.Walk(func(path string, f packr.File) error {
 

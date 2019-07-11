@@ -15,7 +15,7 @@ import (
 
 	"github.com/kyicy/readimension/model"
 	"github.com/kyicy/readimension/utility/epub"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/mholt/archiver"
 	"github.com/nfnt/resize"
 )

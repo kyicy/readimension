@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/kyicy/readimension/model"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type list struct {

@@ -5,8 +5,8 @@ import (
 	"io"
 	"path/filepath"
 
-	"github.com/gobuffalo/packr"
-	"github.com/labstack/echo"
+	"github.com/gobuffalo/packr/v2"
+	"github.com/labstack/echo/v4"
 )
 
 // Template Struct
@@ -19,10 +19,10 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-var box packr.Box
+var box *packr.Box
 
 func init() {
-	box = packr.NewBox("./template")
+	box = packr.New("templateBox", "./template")
 }
 
 func getRender() *Template {
