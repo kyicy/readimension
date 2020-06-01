@@ -20,20 +20,20 @@ Create a configuration file, `config.json`
 ``` json
 {
     "production": {
-        "addr": "0.0.0.0",
+        "addr": "127.0.0.1",
         "port": "10086",
         "serve_static": false,
-        "session_secret": "",
+        "session_secret": "session_secret",
         "emails": ["example@example.com"],
-        "google_analytics": ""
+        "google_analytics": "UA-****-*"
     },
     "development": {
-        "addr": "0.0.0.0",
+        "addr": "127.0.0.1",
         "port": "10086",
         "serve_static": true,
-        "session_secret": "",
+        "session_secret": "session_secret",
         "emails": ["example@example.com"],
-        "google_analytics": ""
+        "google_analytics": "UA-****-*"
     }
 }
 ```
