@@ -9,9 +9,6 @@ readimension is a `epub` web service provides both ***file management*** and ***
 
 
 ## Usage
-Download the binary file from [release page](https://github.com/kyicy/readimension/releases)
-
-or 
 `go get -v github.com/kyicy/readimension`
 
 Switch to an ***working directory*** where `readimension` will save data.

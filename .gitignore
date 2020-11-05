@@ -27,3 +27,5 @@ covers
 *.db
 
 *-packr.go
+
+.bin

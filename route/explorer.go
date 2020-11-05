@@ -40,7 +40,7 @@ func getExplorer(c echo.Context) error {
 		return c.Render(http.StatusOK, "explorer", data)
 	}
 
-	return c.String(http.StatusNotFound, "not found")
+	return c.Redirect(http.StatusFound, "/sign-up")
 }
 
 type _deleteExplorerBody struct {
