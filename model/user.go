@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 // User is related to `users` table in mysql database
@@ -16,7 +16,7 @@ type User struct {
 }
 
 // BeforeCreate is a hook function
-func (u *User) BeforeCreate() error {
+func (u *User) BeforeCreate(tx *gorm.DB) error {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(u.Password), 14)
 	u.Password = string(bytes)
 	return err

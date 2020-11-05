@@ -86,8 +86,7 @@ func postSignUp(c echo.Context) error {
 	}
 
 	model.DB.Create(&list)
-	model.DB.Model(&registerUser).Association("List").Replace(list)
-
+	model.DB.Model(&registerUser).Association("List").Replace(&list)
 	tc.login(&registerUser)
 
 	return c.Redirect(http.StatusSeeOther, "/")

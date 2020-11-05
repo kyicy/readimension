@@ -37,7 +37,7 @@ func postListChildNew(c echo.Context) error {
 	}
 
 	model.DB.Create(&newList)
-	model.DB.Model(listRecord).Association("Children").Append(newList)
+	model.DB.Model(&listRecord).Association("Children").Append(&newList)
 
 	r := make(map[string]string)
 	r["id"] = fmt.Sprintf("%v", newList.ID)

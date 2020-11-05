@@ -236,7 +236,7 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	model.DB.Where("id = ?", listID).Find(&list)
 
-	model.DB.Model(list).Association("Epubs").Append(epubRecord)
+	model.DB.Model(&list).Association("Epubs").Append(&epubRecord)
 
 	userIDStr, _ := getSessionUserID(c)
 

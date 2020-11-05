@@ -11,8 +11,9 @@ import (
 	"path"
 	"time"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+
 	"github.com/kyicy/readimension/model"
 	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo-contrib/session"
@@ -59,12 +60,8 @@ func main() {
 	defer sessionStore.Close()
 
 	// Database Model
-	db, err := gorm.Open("sqlite3", dbPath)
-	defer db.Close()
-	if env != "production" {
-		db.LogMode(true)
-	}
-	defer db.Close()
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
+	checkError(err)
 	model.LoadModel(db)
 
 	// Create Echo Server Instance

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/jinzhu/gorm"
 	"github.com/kyicy/readimension/model"
 	"github.com/labstack/echo/v4"
+	"gorm.io/gorm"
 )
 
 func getExplorerRoot(c echo.Context) error {
@@ -69,7 +69,7 @@ func deleteExplorer(c echo.Context) error {
 		model.DB.Where("user = ? and id = ?", userID, parentListID).Find(&parentList)
 		var epubs []model.Epub
 		model.DB.Where("id in (?)", _body.Books).Find(&epubs)
-		model.DB.Model(&parentList).Association("Epubs").Delete(epubs)
+		model.DB.Model(&parentList).Association("Epubs").Delete(&epubs)
 		model.DB.
 			Where("user_id = ? and list_id = ? and epub_id in (?)",
 				userID, parentListID, _body.Books).
