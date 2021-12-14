@@ -3,10 +3,13 @@ package route
 import (
 	"html/template"
 	"io"
+	"io/ioutil"
+	"os"
 	"path/filepath"
 
-	"github.com/gobuffalo/packr/v2"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
+	"github.com/markbates/pkger"
 )
 
 // Template Struct
@@ -19,15 +22,15 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-var box *packr.Box
-
-func init() {
-	box = packr.New("templateBox", "./template")
-}
-
 func getRender() *Template {
 	var tmpl *template.Template
-	box.Walk(func(path string, f packr.File) error {
+	pkger.Walk("/route/template", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			return nil
+		}
 		name := filepath.Base(path)
 		var tt *template.Template
 
@@ -41,8 +44,18 @@ func getRender() *Template {
 			tt = tmpl.New(name)
 		}
 
-		s, _ := box.FindString(path)
-		tt.Parse(s)
+		f, err := pkger.Open(path)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+		bs, err := ioutil.ReadAll(f)
+		if err != nil {
+			log.Error(err)
+
+			return err
+		}
+		tt.Parse(string(bs))
 		return nil
 	})
 
