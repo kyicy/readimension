@@ -6,7 +6,6 @@ type envRecord struct {
 	SessionSecret   string   `json:"session_secret"`
 	Emails          []string `json:"emails"`
 	GoogleAnalytics string   `json:"google_analytics"`
-	GoogleAdsense   string   `json:"google_adsense"`
 	ServeStatic     bool     `json:"serve_static"`
 }
 

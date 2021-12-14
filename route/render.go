@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/gommon/log"
 	"github.com/markbates/pkger"
 )
 
@@ -51,8 +50,6 @@ func getRender() *Template {
 		defer f.Close()
 		bs, err := ioutil.ReadAll(f)
 		if err != nil {
-			log.Error(err)
-
 			return err
 		}
 		tt.Parse(string(bs))

@@ -187,13 +187,17 @@ func afterUpload(c echo.Context, fileName string) error {
 		var coverFormat string
 		if info.HasCover() {
 			bytes, format, err := info.GetCover()
-			coverFormat = format
-
-			file, err := os.Create("covers/" + book.Hash + "." + format)
-			defer file.Close()
 			if err != nil {
 				return err
 			}
+			coverFormat = format
+
+			file, err := os.Create("covers/" + book.Hash + "." + format)
+			if err != nil {
+				return err
+			}
+
+			defer file.Close()
 
 			// resize to width 1000 using Lanczos resampling
 			// and preserve aspect ratio

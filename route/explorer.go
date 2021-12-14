@@ -14,7 +14,7 @@ func getExplorerRoot(c echo.Context) error {
 }
 
 type getBooksData struct {
-	*TempalteCommon
+	*TemplateCommon
 	List    model.List
 	HasUser bool
 }
@@ -24,7 +24,7 @@ func getExplorer(c echo.Context) error {
 
 	tc := newTemplateCommon(c, "Library Explorer")
 	data := &getBooksData{}
-	data.TempalteCommon = tc
+	data.TemplateCommon = tc
 	data.Active = "/u/explorer"
 
 	userID, _ := getSessionUserID(c)

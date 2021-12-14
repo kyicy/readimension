@@ -5,15 +5,15 @@ import (
 	"errors"
 	"mime"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/packr/v2"
 	mw "github.com/kyicy/readimension/middleware"
-	"github.com/kyicy/readimension/model"
 	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/markbates/pkger"
 	validator "gopkg.in/go-playground/validator.v9"
 )
 
@@ -54,15 +54,27 @@ func Register(e *echo.Echo) {
 	userGroup.POST("/:list_id/books/new/chunksdone", postChunksDone)
 	userGroup.POST("/lists/:id/child/new", postListChildNew)
 
-	box := packr.New("bib_box", "../bib")
-	box.Walk(func(path string, f packr.File) error {
+	pkger.Walk("/bib", func(fullPath string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		tt := strings.Split(fullPath, ":/bib")
+		if len(tt) < 2 {
+			return nil
+		}
+		path := tt[1]
 		extName := filepath.Ext(path)
 		mt := mime.TypeByExtension(extName)
 
-		e.GET("/u/"+path, func(c echo.Context) error {
+		webPath := filepath.Join("/u", path)
+		e.GET(webPath, func(c echo.Context) error {
 			c.Response().Header().Set("Cache-Control", "max-age=3600")
-			r := strings.NewReader(box.String(path))
-			return c.Stream(http.StatusOK, mt, r)
+			f, err := pkger.Open(fullPath)
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			return c.Stream(http.StatusOK, mt, f)
 		})
 		return nil
 	})
@@ -77,22 +89,12 @@ func Register(e *echo.Echo) {
 	})
 }
 
-func getSessionUser(c echo.Context) (*model.User, error) {
-	userID, err := getSessionUserID(c)
-	if err != nil {
-		return nil, err
-	}
-	var userRecord model.User
-	model.DB.Where("id = ?", userID).First(&userRecord)
-	return &userRecord, nil
-}
-
 func getSessionUserID(c echo.Context) (string, error) {
-	sess, err := session.Get("session", c)
+	s, err := session.Get("session", c)
 	if err != nil {
 		return "", err
 	}
-	if ud, flag := sess.Values["userData"]; flag {
+	if ud, flag := s.Values["userData"]; flag {
 		userDataPointer := ud.(*userData)
 		userID := (*userDataPointer)["id"]
 		return userID, nil

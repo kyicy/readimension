@@ -1,15 +1,18 @@
 {{define "footer"}}
-        </main>
-    </body>
-    <hr>
-    <footer>Readimension&nbsp;&copy; 2018~<script>document.write((new Date()).getFullYear())</script>&nbsp;<a href="https://github.com/kyicy/readimension/issues" target="_blank">@kyicy</a></footer>
+</main>
+</body>
+<hr>
+<footer>Readimension&nbsp;&copy; 2018~
+  <script>document.write((new Date()).getFullYear())</script>&nbsp;<a
+    href="https://github.com/kyicy/readimension/issues" target="_blank">@kyicy</a>
+</footer>
 
-{{if .HasGoogleAnlytics}}
+{{if .HasGoogleAnalytics}}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{.GoogleAnalytics}}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
 
   gtag('config', '{{.GoogleAnalytics}}');

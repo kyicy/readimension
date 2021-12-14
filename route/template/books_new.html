@@ -1,7 +1,8 @@
 {{define "books/new"}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.16.2/all.fine-uploader/all.fine-uploader.min.js"
     integrity="sha256-v9au6P0m49eWQchR2OL5FlsBznSOwtpDphH1Mg9XJrw=" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.16.2/all.fine-uploader/fine-uploader-gallery.min.css"
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/file-uploader/5.16.2/all.fine-uploader/fine-uploader-gallery.min.css"
     integrity="sha256-kpkbsX+nDRw9KkbbvG1cZj4uw67QM8y5pVNNk3uTRXo=" crossorigin="anonymous" />
 
 <section class="upload-container">
@@ -18,6 +19,7 @@
     #fine-uploader-gallery {
         background-color: white;
     }
+
     @media only screen and (max-width: 600px) {
         #fine-uploader-gallery {
             width: 90%;
@@ -28,7 +30,7 @@
         #fine-uploader-gallery {
             min-width: 400px;
         }
-    }    
+    }
 </style>
 {{template "fine-uploader"}}
 <script>
@@ -52,9 +54,9 @@
             sizeLimit: 128 * 1024 * 1024,
         },
         callbacks: {
-            onAllComplete: function(lucky, unlucky) {
+            onAllComplete: function (lucky, unlucky) {
                 if (unlucky.length === 0) {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         location.reload()
                     }, 1000)
                 }

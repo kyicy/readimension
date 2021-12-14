@@ -10,54 +10,48 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type TempalteCommon struct {
+type TemplateCommon struct {
 	echo.Context
 	Title           string
 	Active          string
 	Flashes         []string
 	GoogleAnalytics string
-	GoogleAdsense   string
 }
 
-func (tc *TempalteCommon) GetSession() (*sessions.Session, error) {
+func (tc *TemplateCommon) GetSession() (*sessions.Session, error) {
 	return session.Get("session", tc.Context)
 }
 
-func (tc *TempalteCommon) logout() {
-	sess, _ := tc.GetSession()
-	sess.Values["userExist?"] = false
-	delete(sess.Values, "userData")
-	sess.Save(tc.Request(), tc.Response())
+func (tc *TemplateCommon) logout() {
+	s, _ := tc.GetSession()
+	s.Values["userExist?"] = false
+	delete(s.Values, "userData")
+	s.Save(tc.Request(), tc.Response())
 }
 
-func (tc *TempalteCommon) login(u *model.User) {
-	sess, _ := tc.GetSession()
-	sess.Values["userExist?"] = true
-	sess.Values["userData"] = userData{
+func (tc *TemplateCommon) login(u *model.User) {
+	s, _ := tc.GetSession()
+	s.Values["userExist?"] = true
+	s.Values["userData"] = userData{
 		"id":    fmt.Sprintf("%d", u.ID),
 		"name":  u.Name,
 		"email": u.Email,
 	}
-	sess.Save(tc.Request(), tc.Response())
+	s.Save(tc.Request(), tc.Response())
 }
 
 // HasGA aka check if user has configured google analytics
-func (tc *TempalteCommon) HasGoogleAnlytics() bool {
+func (tc *TemplateCommon) HasGoogleAnalytics() bool {
 	return len(tc.GoogleAnalytics) > 0
 }
 
-func (tc *TempalteCommon) HasGoogleAdsense() bool {
-	return len(tc.GoogleAdsense) > 0
-}
-
-func newTemplateCommon(c echo.Context, title string) *TempalteCommon {
+func newTemplateCommon(c echo.Context, title string) *TemplateCommon {
 	title = title + " - Readimension"
 	configuration := config.Get()
-	return &TempalteCommon{
+	return &TemplateCommon{
 		Context:         c,
 		Title:           title,
 		Active:          c.Request().URL.Path,
 		GoogleAnalytics: configuration.GoogleAnalytics,
-		GoogleAdsense:   configuration.GoogleAdsense,
 	}
 }

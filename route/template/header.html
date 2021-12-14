@@ -9,20 +9,10 @@
     <title>{{.Title}}</title>
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css"
+        integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Princess+Sofia" rel="stylesheet">
-
-    {{if .HasGoogleAdsense}}
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "{{.GoogleAdsense}}",
-        enable_page_level_ads: true
-      });
-    </script>
-    {{end}}
 </head>
 
 <body>
@@ -32,15 +22,15 @@
         </div>
         <div role="header-right">
             {{with .GetSession}}
-                {{if  (index .Values "userExist?")}}
-                    {{with index .Values "userData"}}
-                    <span>{{index . "name"}} | </span>
-                    {{end}}
-                    <a href="/sign-out">Sign Out</a>
-                {{else}}
-                    <a href="/sign-in">Sign In</a>
-                    <a href="/sign-up">Sign Up</a>
-                {{end}}
+            {{if (index .Values "userExist?")}}
+            {{with index .Values "userData"}}
+            <span>{{index . "name"}} | </span>
+            {{end}}
+            <a href="/sign-out">Sign Out</a>
+            {{else}}
+            <a href="/sign-in">Sign In</a>
+            <a href="/sign-up">Sign Up</a>
+            {{end}}
 
             {{end}}
 

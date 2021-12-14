@@ -8,7 +8,6 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/labstack/echo-contrib v0.11.0
 	github.com/labstack/echo/v4 v4.6.1
-	github.com/labstack/gommon v0.3.1
 	github.com/markbates/pkger v0.17.1
 	github.com/mholt/archiver v3.1.1+incompatible
 	github.com/michaeljs1990/sqlitestore v0.0.0-20210507162135-8585425bc864
@@ -36,6 +35,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/karrick/godirwalk v1.16.1 // indirect
+	github.com/labstack/gommon v0.3.1 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/markbates/errx v1.1.0 // indirect
 	github.com/markbates/oncer v1.0.0 // indirect

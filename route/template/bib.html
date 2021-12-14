@@ -1,10 +1,12 @@
 {{define "bibi"}}
 <!DOCTYPE html>
 <html id="bibi">
+
 <head>
 
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=4.0, user-scalable=yes, shrink-to-fit=no" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=4.0, user-scalable=yes, shrink-to-fit=no" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	<title>This E-Book is Published with BiB/i | EPUB Reader on your website.</title>
@@ -19,7 +21,7 @@
 	<link id="bibi-style" rel="stylesheet" href="/u/i/resources/styles/bibi.css" />
 	<link id="bibi-dress" rel="stylesheet" href="/u/i/wardrobe/everyday/bibi.dress.css" />
 	<script id="bibi-script" src="/u/i/resources/scripts/bibi.js"></script>
-	<script id="bibi-preset" src="/u/i/presets/default.js" data-bibi-bookshelf=""></script>	
+	<script id="bibi-preset" src="/u/i/presets/default.js" data-bibi-bookshelf=""></script>
 
 </head>
 
@@ -28,7 +30,8 @@
 	<div id="bibi-info">
 		<h1>This E-Book is Published on the Web with Bibi | EPUB Reader on your website.</h1>
 		<ul>
-			<li><a href="https://bibi.epub.link">Bibi | EPUB Reader on your website. (Official Website / Japanese)</a></li>
+			<li><a href="https://bibi.epub.link">Bibi | EPUB Reader on your website. (Official Website / Japanese)</a>
+			</li>
 			<li><a href="https://github.com/satorumurmur/bibi">Bibi on GitHub (English)</a></li>
 		</ul>
 	</div>
@@ -39,7 +42,7 @@
 </body>
 
 
-{{if .HasGoogleAnlytics}}
+{{if .HasGoogleAnalytics}}
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{.GoogleAnalytics}}"></script>
 <script>
@@ -53,5 +56,6 @@
 	gtag('config', '{{.GoogleAnalytics}}');
 </script>
 {{end}}
+
 </html>
 {{end}}
