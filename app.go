@@ -3,13 +3,14 @@ package main
 import (
 	"mime"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/gobuffalo/packr/v2"
 	"github.com/kyicy/readimension/route"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/markbates/pkger"
 )
 
 func createInstance(env string) *echo.Echo {
@@ -24,31 +25,34 @@ func createInstance(env string) *echo.Echo {
 		HSTSMaxAge:         3600,
 	}))
 
-	isProduction := env == "production"
-	if isProduction {
-		bundle(e)
-	} else {
-		e.Static("/", "public")
-	}
-
+	bundle(e)
 	route.Register(e)
 
 	return e
 }
 
 func bundle(e *echo.Echo) {
-	box := packr.New("public_box", "./public")
-
-	box.Walk(func(path string, f packr.File) error {
-
+	pkger.Walk("/public", func(fullPath string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		tt := strings.Split(fullPath, ":/public")
+		if len(tt) < 2 {
+			return nil
+		}
+		path := tt[1]
 		extName := filepath.Ext(path)
 		mt := mime.TypeByExtension(extName)
 
-		e.GET("/"+path, func(c echo.Context) error {
+		webPath := filepath.Join("/", path)
+		e.GET(webPath, func(c echo.Context) error {
 			c.Response().Header().Set("Cache-Control", "max-age=3600")
-			s, _ := box.FindString(path)
-			r := strings.NewReader(s)
-			return c.Stream(http.StatusOK, mt, r)
+			f, err := pkger.Open(fullPath)
+			if err != nil {
+				return err
+			}
+			defer f.Close()
+			return c.Stream(http.StatusOK, mt, f)
 		})
 		return nil
 	})
