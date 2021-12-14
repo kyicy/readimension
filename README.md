@@ -7,13 +7,7 @@ readimension is a `epub` web service provides both ***file management*** and ***
 - Responsive web interface
 - Web based epub reader([satorumurmur/bibi](https://github.com/satorumurmur/bibi))
 
-
-## Usage
-`go install github.com/kyicy/readimension@latest`
-
-Switch to an ***working directory*** where `readimension` will save data.
-
-Create a configuration file, `config.json`
+## Conf
 ``` json
 {
     "production": {
@@ -34,6 +28,28 @@ Create a configuration file, `config.json`
     }
 }
 ```
+
+## Docker Usage
+```
+git clone https://github.com/kyicy/readimension.git
+cd readimension
+docker build  -t readimension .
+
+## try it out with default conf
+docker run --rm -it -p 10086:10086 readimension
+
+## sharing
+## suppose there's a config.json at $(pwd)/test
+docker run --rm -it -p 10086:10086 -v $(pwd)/test:/data/readimension readimension
+```
+
+## Usage
+`go install github.com/kyicy/readimension@latest`
+
+Switch to an ***working directory*** where `readimension` will save data.
+
+Create a configuration file, `config.json`
+
 Then start the server
 ``` sh
 readimension --env development --path .
