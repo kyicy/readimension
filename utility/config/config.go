@@ -7,9 +7,10 @@ type envRecord struct {
 	Emails          []string `json:"emails"`
 	GoogleAnalytics string   `json:"google_analytics"`
 	ServeStatic     bool     `json:"serve_static"`
+	WorkDir         string   `json:"-"`
 }
 
-type ConfigStruct map[string]envRecord
+type ConfigStruct map[string]*envRecord
 
 var Configuration ConfigStruct
 
@@ -31,6 +32,6 @@ func HasUser(email string) bool {
 	return false
 }
 
-func Get() envRecord {
+func Get() *envRecord {
 	return Configuration[ENV]
 }

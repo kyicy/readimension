@@ -14,6 +14,7 @@ import (
 	"strconv"
 
 	"github.com/kyicy/readimension/model"
+	"github.com/kyicy/readimension/utility/config"
 	"github.com/kyicy/readimension/utility/epub"
 	"github.com/labstack/echo/v4"
 	"github.com/mholt/archiver"
@@ -76,8 +77,9 @@ func postBooksNew(c echo.Context) error {
 		writeUploadResponse(w, err)
 		return nil
 	}
+	conf := config.Get()
 
-	fileDir := fmt.Sprintf("%s/%s", uploadDir, uuid)
+	fileDir := filepath.Join(conf.WorkDir, uploadDir, uuid)
 	if err := os.MkdirAll(fileDir, 0777); err != nil {
 		writeUploadResponse(w, err)
 		return nil
@@ -86,9 +88,9 @@ func postBooksNew(c echo.Context) error {
 	var filename string
 	partIndex := req.FormValue(paramPartIndex)
 	if len(partIndex) == 0 {
-		filename = fmt.Sprintf("%s/%s", fileDir, headers.Filename)
+		filename = filepath.Join(fileDir, headers.Filename)
 	} else {
-		filename = fmt.Sprintf("%s/%s_%05s", fileDir, uuid, partIndex)
+		filename = filepath.Join(fileDir, fmt.Sprintf("%s_%05s", uuid, partIndex))
 	}
 
 	outfile, err := os.Create(filename)
@@ -114,6 +116,7 @@ func postBooksNew(c echo.Context) error {
 func postChunksDone(c echo.Context) error {
 	req := c.Request()
 	w := c.Response()
+	conf := config.Get()
 
 	uuid := req.FormValue(paramUUID)
 	filename := req.FormValue(paramFileName)
@@ -128,7 +131,7 @@ func postChunksDone(c echo.Context) error {
 		return nil
 	}
 
-	finalFilename := fmt.Sprintf("%s/%s/%s", uploadDir, uuid, filename)
+	finalFilename := filepath.Join(conf.WorkDir, uploadDir, uuid, filename)
 	f, err := os.Create(finalFilename)
 	if err != nil {
 		writeHTTPResponse(w, http.StatusInternalServerError, err)
@@ -137,7 +140,7 @@ func postChunksDone(c echo.Context) error {
 
 	var totalWritten int64
 	for i := 0; i < totalParts; i++ {
-		part := fmt.Sprintf("%[1]s/%[2]s/%[2]s_%05[3]d", uploadDir, uuid, i)
+		part := filepath.Join(conf.WorkDir, uploadDir, uuid, fmt.Sprintf("%s_%05d", uuid, i))
 		partFile, err := os.Open(part)
 		if err != nil {
 			writeHTTPResponse(w, http.StatusInternalServerError, err)
@@ -178,7 +181,8 @@ func afterUpload(c echo.Context, fileName string) error {
 	}
 
 	book := info.Book()
-	storeFolder := "books/" + book.Hash
+	conf := config.Get()
+	storeFolder := filepath.Join(conf.WorkDir, "books", book.Hash)
 
 	var epubRecord model.Epub
 	model.DB.Where("sha256 = ?", book.Hash).First(&epubRecord)
@@ -186,13 +190,11 @@ func afterUpload(c echo.Context, fileName string) error {
 	if epubRecord.SHA256 != book.Hash {
 		var coverFormat string
 		if info.HasCover() {
-			bytes, format, err := info.GetCover()
-			if err != nil {
-				return err
-			}
+			bytes, format, _ := info.GetCover()
 			coverFormat = format
 
-			file, err := os.Create("covers/" + book.Hash + "." + format)
+			coverPath := filepath.Join(conf.WorkDir, "covers", fmt.Sprintf("%s.%s", book.Hash, format))
+			file, err := os.Create(coverPath)
 			if err != nil {
 				return err
 			}

@@ -35,13 +35,16 @@ func main() {
 	env, workingPath := parseFlag()
 
 	// book folder
-	os.MkdirAll(path.Join(workingPath, "books"), 0777)
+	err := os.MkdirAll(path.Join(workingPath, "books"), 0777)
+	checkError(err)
 
 	// cover folder
-	os.MkdirAll(path.Join(workingPath, "covers"), 0777)
+	err = os.MkdirAll(path.Join(workingPath, "covers"), 0777)
+	checkError(err)
 
 	// upload folder
-	os.MkdirAll(path.Join(workingPath, "uploads"), 0777)
+	err = os.MkdirAll(path.Join(workingPath, "uploads"), 0777)
+	checkError(err)
 
 	file, err := os.Open(path.Join(workingPath, "config.json"))
 	checkError(err)
@@ -49,8 +52,10 @@ func main() {
 	bytes, err := ioutil.ReadAll(file)
 	checkError(err)
 
-	json.Unmarshal(bytes, &config.Configuration)
+	err = json.Unmarshal(bytes, &config.Configuration)
+	checkError(err)
 	envConfig := config.Configuration[env]
+	envConfig.WorkDir = workingPath
 	config.SetENV(env)
 
 	// Session Store

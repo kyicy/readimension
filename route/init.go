@@ -44,8 +44,8 @@ func Register(e *echo.Echo) {
 
 	conf := config.Get()
 	if conf.ServeStatic {
-		e.Static("/covers", "covers")
-		e.Static("/books", "books")
+		e.Static("/covers", filepath.Join(conf.WorkDir, "covers"))
+		e.Static("/books", filepath.Join(conf.WorkDir, "books"))
 	}
 
 	userGroup := e.Group("/u", mw.UserAuth)
