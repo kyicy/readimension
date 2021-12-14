@@ -49,8 +49,8 @@ func main() {
 	bytes, err := ioutil.ReadAll(file)
 	checkError(err)
 
-	json.Unmarshal(bytes, &config.Configuratiosn)
-	envConfig := config.Configuratiosn[env]
+	json.Unmarshal(bytes, &config.Configuration)
+	envConfig := config.Configuration[env]
 	config.SetENV(env)
 
 	// Session Store

@@ -9,7 +9,7 @@ readimension is a `epub` web service provides both ***file management*** and ***
 
 
 ## Usage
-`go get -v github.com/kyicy/readimension`
+`go install github.com/kyicy/readimension@latest`
 
 Switch to an ***working directory*** where `readimension` will save data.
 

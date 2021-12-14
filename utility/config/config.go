@@ -12,7 +12,7 @@ type envRecord struct {
 
 type ConfigStruct map[string]envRecord
 
-var Configuratiosn ConfigStruct
+var Configuration ConfigStruct
 
 var ENV string
 
@@ -21,7 +21,7 @@ func SetENV(env string) {
 }
 
 func HasUser(email string) bool {
-	configObj := Configuratiosn[ENV]
+	configObj := Configuration[ENV]
 
 	for _, _email := range configObj.Emails {
 		if email == _email {
@@ -33,5 +33,5 @@ func HasUser(email string) bool {
 }
 
 func Get() envRecord {
-	return Configuratiosn[ENV]
+	return Configuration[ENV]
 }
