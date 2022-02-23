@@ -8,7 +8,7 @@
 
     <div for="control">
         {{if (ne .List.ParentID 0)}}
-        <a class="pure-button" href="/u/explorer/{{.List.ParentID}}"><i class="material-icons">arrow_back</i></a>
+        <a class="pure-button" href="/u/explorer/{{.List.ParentID}}"><em class="material-icons">arrow_back</em></a>
         {{end}}
         {{if .HasUser}}
         <form class="pure-form new-list" style="display: none;">
@@ -33,9 +33,9 @@
             {{range .}}
             <div class="list-child selectable" data-id={{.ID}}>
                 <a href="/u/explorer/{{.ID}}">
-                    <i class="material-icons">
+                    <em class="material-icons">
                         folder
-                    </i>
+                    </em>
                 </a>
                 <span>{{.Name}}</span>
             </div>

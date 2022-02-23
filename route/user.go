@@ -9,12 +9,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+const (
+	signUpPath  = "/sign-up"
+	signInPath  = "/sign-in"
+	signUpFlash = "sign_up"
+	signInFlash = "sign_in"
+)
+
 func getSignUp(c echo.Context) error {
 	tc := newTemplateCommon(c, "Sign Up")
 	tc.logout()
 
 	s, _ := tc.GetSession()
-	flashes := s.Flashes("sign_up")
+	flashes := s.Flashes(signUpPath)
 
 	for _, flash := range flashes {
 		tc.Flashes = append(tc.Flashes, flash.(string))
@@ -44,32 +51,32 @@ func postSignUp(c echo.Context) error {
 	// form validation error
 	err := validate.Struct(u)
 	if err != nil {
-		s.AddFlash(err.Error(), "sign_up")
+		s.AddFlash(err.Error(), signUpFlash)
 		s.Save(c.Request(), c.Response())
-		return c.Redirect(http.StatusSeeOther, "/sign-up")
+		return c.Redirect(http.StatusSeeOther, signUpPath)
 	}
 
 	// email not allowed
 	if !config.HasUser(u.Email) {
-		s.AddFlash("Email not allowed", "sign_up")
+		s.AddFlash("Email not allowed", signUpFlash)
 		s.Save(c.Request(), c.Response())
-		return c.Redirect(http.StatusSeeOther, "/sign-up")
+		return c.Redirect(http.StatusSeeOther, signUpPath)
 	}
 
 	// email taken error
 	dbUser := new(model.User)
 	model.DB.Where("email = ?", u.Email).First(&dbUser)
 	if dbUser.Email == u.Email {
-		s.AddFlash("Email already taken", "sign_up")
+		s.AddFlash("Email already taken", signUpFlash)
 		s.Save(c.Request(), c.Response())
-		return c.Redirect(http.StatusSeeOther, "/sign-up")
+		return c.Redirect(http.StatusSeeOther, signUpPath)
 	}
 
 	// password not matching error
 	if u.Password != u.CPassword {
-		s.AddFlash("password not matching", "sign_up")
+		s.AddFlash("password not matching", signUpFlash)
 		s.Save(c.Request(), c.Response())
-		return c.Redirect(http.StatusSeeOther, "/sign-up")
+		return c.Redirect(http.StatusSeeOther, signUpPath)
 	}
 
 	registerUser := model.User{
@@ -98,7 +105,7 @@ func getSignIn(c echo.Context) error {
 	tc.logout()
 
 	s, _ := tc.GetSession()
-	flashes := s.Flashes("sign_in")
+	flashes := s.Flashes(signInFlash)
 
 	for _, flash := range flashes {
 		tc.Flashes = append(tc.Flashes, flash.(string))
@@ -124,23 +131,23 @@ func postSignIn(c echo.Context) error {
 
 	// form validation
 	if err := validate.Struct(u); err != nil {
-		s.AddFlash(err.Error(), "sign_in")
+		s.AddFlash(err.Error(), signInFlash)
 		s.Save(c.Request(), c.Response())
-		return c.Redirect(http.StatusSeeOther, "/sign-in")
+		return c.Redirect(http.StatusSeeOther, signInPath)
 	}
 
 	dbUser := new(model.User)
 	model.DB.Where("email = ?", u.Email).First(&dbUser)
 	if dbUser.Email != u.Email {
-		s.AddFlash("Account not exist", "sign_in")
+		s.AddFlash("Account not exist", signInFlash)
 		s.Save(c.Request(), c.Response())
-		return c.Redirect(http.StatusSeeOther, "/sign-in")
+		return c.Redirect(http.StatusSeeOther, signInPath)
 	}
 
 	if !dbUser.ValidatePassword(u.Password) {
-		s.AddFlash("Password error!", "sign_in")
+		s.AddFlash("Password error!", signInFlash)
 		s.Save(c.Request(), c.Response())
-		return c.Redirect(http.StatusSeeOther, "/sign-in")
+		return c.Redirect(http.StatusSeeOther, signInPath)
 	}
 
 	tc.login(dbUser)

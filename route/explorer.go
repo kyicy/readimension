@@ -43,36 +43,36 @@ func getExplorer(c echo.Context) error {
 	return c.Redirect(http.StatusFound, "/sign-up")
 }
 
-type _deleteExplorerBody struct {
+type deleteExplorerBody struct {
 	Lists []string `json:"lists"`
 	Books []string `json:"books"`
 }
 
 func deleteExplorer(c echo.Context) error {
 	parentListID := c.Param("list_id")
-	_body := new(_deleteExplorerBody)
+	body := new(deleteExplorerBody)
 
-	if err := c.Bind(_body); err != nil {
+	if err := c.Bind(body); err != nil {
 		return err
 	}
 
 	userID, _ := getSessionUserID(c)
 
 	// remove child lists
-	if len(_body.Lists) > 0 {
-		model.DB.Where("parent_id = ? and user = ? and id in (?)", parentListID, userID, _body.Lists).Delete(model.List{})
+	if len(body.Lists) > 0 {
+		model.DB.Where("parent_id = ? and user = ? and id in (?)", parentListID, userID, body.Lists).Delete(model.List{})
 	}
 
 	// remove associated epubs
-	if len(_body.Books) > 0 {
+	if len(body.Books) > 0 {
 		var parentList model.List
 		model.DB.Where("user = ? and id = ?", userID, parentListID).Find(&parentList)
 		var epubs []model.Epub
-		model.DB.Where("id in (?)", _body.Books).Find(&epubs)
+		model.DB.Where("id in (?)", body.Books).Find(&epubs)
 		model.DB.Model(&parentList).Association("Epubs").Delete(&epubs)
 		model.DB.
 			Where("user_id = ? and list_id = ? and epub_id in (?)",
-				userID, parentListID, _body.Books).
+				userID, parentListID, body.Books).
 			Delete(model.UserListEpub{})
 	}
 	return c.String(http.StatusOK, "")
