@@ -21,8 +21,8 @@ function bindNewFolderForm() {
     })
     form.addEventListener("submit", function (evt) {
         evt.preventDefault()
-        data = new FormData(this)
-        name = data.get("name")
+        const data = new FormData(this)
+        let name = data.get("name")
         name = name.trim()
 
         let request = new XMLHttpRequest();
@@ -56,7 +56,7 @@ function put2Lists(data) {
     divEle.dataset.id = id
     divEle.innerHTML = `<a href="/u/explorer/${id}"><i class="material-icons">folder</i></a><span>${name}<span>`
 
-    let container = document.querySelector("[for=show-lists] [role=lists]").appendChild(divEle)
+    document.querySelector("[for=show-lists] [role=lists]").appendChild(divEle)
 }
 
 function ready(fn) {
@@ -86,7 +86,7 @@ function bindSelection() {
         }
         return ele
     }
-    const selection = Selection.create({
+    Selection.create({
 
         // Class for the selection-area
         class: 'selection',
@@ -104,7 +104,7 @@ function bindSelection() {
             if (target.tagName === "I" || target.tagName === "IMG") {
                 return
             }
-            eleRoot = getEleRoot(evt.target)
+            const eleRoot = getEleRoot(evt.target)
             // Check if clicked element is already selected
             const selected = eleRoot.classList.contains('selected');
 
@@ -114,7 +114,7 @@ function bindSelection() {
 
                 // Remove class from every element which is selected
                 evt.selectedElements.forEach((s) => {
-                    root = getEleRoot(s)
+                    const root = getEleRoot(s)
                     root.classList.remove('selected')
                 });
 
