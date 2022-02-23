@@ -24,6 +24,10 @@
         "qquuid",
         "readimension",
         "satorumurmur",
+        "sonarcloud",
         "tmpl"
-    ]
+    ],
+    "yaml.schemas": {
+        "https://json.schemastore.org/github-workflow.json": "file:///home/kyicy/Workspace/src/github.com/kyicy/readimension/.github/workflows/build.yml"
+    }
 }
