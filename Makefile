@@ -14,7 +14,7 @@ sass:
 	.bin/dart-sass/sass --no-source-map public/styles/style.scss public/styles/style.css
 
 bundle:
-	packr2
+	pkger -o route
 
 build:
 	go build -o readimension *.go
@@ -27,8 +27,9 @@ compile: bundle build
 preset: preset-sass
 
 preset-sass:
+	go install github.com/markbates/pkger/cmd/pkger@latest
 	mkdir -p .bin
-	curl -fkLo .bin/sass.tar.gz https://github.com/sass/dart-sass/releases/download/1.29.0/dart-sass-1.29.0-${detected_sass_OS}-x64.tar.gz
+	curl -fkLo .bin/sass.tar.gz https://github.com/sass/dart-sass/releases/download/1.49.9/dart-sass-1.49.9-${detected_sass_OS}-x64.tar.gz
 	tar xvzf .bin/sass.tar.gz -C .bin
 	chmod +x .bin/dart-sass/sass
 	rm -rf .bin/sass.tar.gz
