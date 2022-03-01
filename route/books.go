@@ -34,6 +34,7 @@ const (
 	paramChunkSize       = "qqchunksize"      // size of the chunks
 )
 
+// UploadResponse implement Fine Uploader's desired res
 type UploadResponse struct {
 	Success      bool   `json:"success"`
 	Error        string `json:"error,omitempty"`

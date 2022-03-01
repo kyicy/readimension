@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"image"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
@@ -10,7 +11,7 @@ import (
 
 	"github.com/kyicy/readimension/utility/epub"
 	"github.com/mholt/archiver"
-	"github.com/nfnt/resize"
+	"golang.org/x/image/draw"
 	"gorm.io/gorm"
 )
 
@@ -40,6 +41,20 @@ func (e *Epub) StoreName() string {
 	}
 }
 
+func Scale(src image.Image) image.Image {
+	p := src.Bounds().Size()
+	var rect image.Rectangle
+	if p.X < 300 {
+		rect = src.Bounds()
+	} else {
+		y := int(float64(p.Y) * (300.0 / float64(p.X)))
+		rect = image.Rect(0, 0, 300, y)
+	}
+	dst := image.NewRGBA(rect)
+	draw.ApproxBiLinear.Scale(dst, rect, src, src.Bounds(), draw.Over, nil)
+	return dst
+}
+
 func NewEpub(info epub.BookInfo, workDir, fileName, storeFolder string) (*Epub, error) {
 	book := info.Book()
 	var coverFormat string
@@ -57,7 +72,7 @@ func NewEpub(info epub.BookInfo, workDir, fileName, storeFolder string) (*Epub, 
 
 		// resize to width 1000 using Lanczos resampling
 		// and preserve aspect ratio
-		m := resize.Resize(300, 0, bytes, resize.Lanczos3)
+		m := Scale(bytes)
 
 		switch format {
 		case "gif":
