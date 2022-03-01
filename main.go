@@ -14,10 +14,10 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
+	"github.com/gorilla/sessions"
 	"github.com/kyicy/readimension/model"
 	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo-contrib/session"
-	"github.com/michaeljs1990/sqlitestore"
 )
 
 func parseFlag() (string, string) {
@@ -58,20 +58,15 @@ func main() {
 	envConfig.WorkDir = workingPath
 	config.SetENV(env)
 
-	// Session Store
-	dbPath := path.Join(workingPath, "readimension.db")
-	sessionStore, err := sqlitestore.NewSqliteStore(dbPath, "sessions", "/", 3600*24*365, []byte(envConfig.SessionSecret))
-	checkError(err)
-	defer sessionStore.Close()
-
 	// Database Model
+	dbPath := path.Join(workingPath, "readimension.db")
 	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	checkError(err)
 	model.LoadModel(db)
 
 	// Create Echo Server Instance
 	e := createInstance(env)
-	e.Use(session.Middleware(sessionStore))
+	e.Use(session.Middleware(sessions.NewCookieStore([]byte(envConfig.SessionSecret))))
 
 	// Start the Server
 	addr := fmt.Sprintf("%s:%s", envConfig.Addr, envConfig.Port)

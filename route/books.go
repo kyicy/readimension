@@ -4,9 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"image/gif"
-	"image/jpeg"
-	"image/png"
 	"io"
 	"net/http"
 	"os"
@@ -17,8 +14,6 @@ import (
 	"github.com/kyicy/readimension/utility/config"
 	"github.com/kyicy/readimension/utility/epub"
 	"github.com/labstack/echo/v4"
-	"github.com/mholt/archiver"
-	"github.com/nfnt/resize"
 )
 
 const uploadDir = "uploads"
@@ -39,6 +34,7 @@ const (
 	paramChunkSize       = "qqchunksize"      // size of the chunks
 )
 
+// UploadResponse implement Fine Uploader's desired res
 type UploadResponse struct {
 	Success      bool   `json:"success"`
 	Error        string `json:"error,omitempty"`
@@ -184,57 +180,13 @@ func afterUpload(c echo.Context, fileName string) error {
 	conf := config.Get()
 	storeFolder := filepath.Join(conf.WorkDir, "books", book.Hash)
 
-	var epubRecord model.Epub
-	model.DB.Where("sha256 = ?", book.Hash).First(&epubRecord)
+	epubRecord := new(model.Epub)
+	model.DB.Where("sha256 = ?", book.Hash).First(epubRecord)
 
 	if epubRecord.SHA256 != book.Hash {
-		var coverFormat string
-		if info.HasCover() {
-			bytes, format, _ := info.GetCover()
-			coverFormat = format
-
-			coverPath := filepath.Join(conf.WorkDir, "covers", fmt.Sprintf("%s.%s", book.Hash, format))
-			file, err := os.Create(coverPath)
-			if err != nil {
-				return err
-			}
-
-			defer file.Close()
-
-			// resize to width 1000 using Lanczos resampling
-			// and preserve aspect ratio
-			m := resize.Resize(300, 0, bytes, resize.Lanczos3)
-
-			switch format {
-			case "gif":
-				gif.Encode(file, m, nil)
-			case "jpeg":
-				jpeg.Encode(file, m, nil)
-			case "png":
-				png.Encode(file, m)
-			}
-		}
-
-		epubRecord = model.Epub{
-			Title:       book.Title,
-			SHA256:      book.Hash,
-			SizeByMB:    float64(book.FileSize) / float64(1024*1024),
-			Author:      book.Author,
-			HasCover:    info.HasCover(),
-			CoverFormat: coverFormat,
-		}
-
-		model.DB.Create(&epubRecord)
-
-		var err error
-		if epubRecord.IsZipped() {
-			err = os.Rename(fileName, fmt.Sprintf("%s.epub", storeFolder))
-		} else {
-			err = archiver.DefaultZip.Unarchive(fileName, storeFolder)
-		}
-
+		epubRecord, err = model.NewEpub(info, conf.WorkDir, fileName, storeFolder)
 		if err != nil {
-			c.Logger().Error(err)
+			return err
 		}
 	}
 
@@ -242,7 +194,7 @@ func afterUpload(c echo.Context, fileName string) error {
 
 	model.DB.Where("id = ?", listID).Find(&list)
 
-	model.DB.Model(&list).Association("Epubs").Append(&epubRecord)
+	model.DB.Model(&list).Association("Epubs").Append(epubRecord)
 
 	userIDStr, _ := getSessionUserID(c)
 
@@ -256,9 +208,6 @@ func afterUpload(c echo.Context, fileName string) error {
 	model.DB.Create(&ule)
 
 	path := filepath.Dir(fileName)
-	if err := os.RemoveAll(path); err != nil {
-		c.Logger().Error(err)
-	}
-
+	_ = os.RemoveAll(path)
 	return nil
 }

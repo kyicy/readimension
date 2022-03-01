@@ -5,9 +5,9 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"image"
-	_ "image/gif"
-	_ "image/jpeg"
-	_ "image/png"
+	_ "image/gif"  // supports gif
+	_ "image/jpeg" // supports jpeg
+	_ "image/png"  // supports png
 	"io"
 	"os"
 	"path/filepath"

@@ -9,12 +9,12 @@ import (
 	"path/filepath"
 	"strings"
 
+	validator "github.com/go-playground/validator/v10"
 	mw "github.com/kyicy/readimension/middleware"
 	"github.com/kyicy/readimension/utility/config"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/markbates/pkger"
-	validator "gopkg.in/go-playground/validator.v9"
 )
 
 type userData map[string]string

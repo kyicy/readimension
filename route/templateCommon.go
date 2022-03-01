@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TemplateCommon : info container for rendering templates
 type TemplateCommon struct {
 	echo.Context
 	Title           string
@@ -18,6 +19,7 @@ type TemplateCommon struct {
 	GoogleAnalytics string
 }
 
+// GetSession : retrieve session object
 func (tc *TemplateCommon) GetSession() (*sessions.Session, error) {
 	return session.Get("session", tc.Context)
 }
@@ -40,7 +42,7 @@ func (tc *TemplateCommon) login(u *model.User) {
 	s.Save(tc.Request(), tc.Response())
 }
 
-// HasGA aka check if user has configured google analytics
+// HasGoogleAnalytics : check if user has configured google analytics
 func (tc *TemplateCommon) HasGoogleAnalytics() bool {
 	return len(tc.GoogleAnalytics) > 0
 }

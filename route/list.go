@@ -9,17 +9,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type list struct {
+type listBody struct {
 	Name string `json:"name" validate:"required,max=100"`
 }
 
 func postListChildNew(c echo.Context) error {
-	_list := new(list)
-	if err := c.Bind(_list); err != nil {
+	list := new(listBody)
+	if err := c.Bind(list); err != nil {
 		return err
 	}
 
-	if err := validate.Struct(_list); err != nil {
+	if err := validate.Struct(list); err != nil {
 		return err
 	}
 
@@ -31,7 +31,7 @@ func postListChildNew(c echo.Context) error {
 	userID, _ := strconv.Atoi(userIDStr)
 
 	newList := model.List{
-		Name:     _list.Name,
+		Name:     list.Name,
 		ParentID: uint(id),
 		User:     uint(userID),
 	}
