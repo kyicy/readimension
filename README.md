@@ -44,7 +44,7 @@ docker run --rm -it -p 10086:10086 -v $(pwd)/test:/data/readimension readimensio
 ```
 
 ## Usage
-`go install github.com/kyicy/readimension@latest0`
+`go install github.com/kyicy/readimension@latest`
 
 Switch to an ***working directory*** where `readimension` will save data.
 
